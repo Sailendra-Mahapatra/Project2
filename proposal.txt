@@ -1,0 +1,12 @@
+Trade WAR with China?
+We will be analyzing the effects of the trade war with China on the imports and exports between the two countries. The trade war has been a highly covered topic in the media since it started upon Donald Trump’s presidency. We would like to know if the effects are as profound as the media would like us to believe. 
+To do this we will utilize the census bureau's international trade API. We will populate our server side database with information from this API. A flask App will be used to create our API. That API will be developed to service our front-end web dashboard. The dashboard will consist of fully interactive D3 graphs and charts. Principal graphs will be, PIE, LINE, and a TREE graph. 
+
+Relevant Links:
+https://www.census.gov/data/developers/data-sets/international-trade.html - API
+https://www.export.gov/article?id=eCommerce-Harmonized-System-Codes – Understanding Harmonized system
+http://www.datamyne.com/ - Inspiration
+https://www.ustradenumbers.com/ - Inspiration
+https://git.heroku.com/lit-refuge-35918.git - HEROKU LINK
+https://github.com/Sailendra-Mahapatra/Project2  - GITHUB
+
