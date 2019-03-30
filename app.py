@@ -7,14 +7,15 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 from flask import Flask, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
+import gunicorn
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///data/lr.sqlite"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///../data/china_trade.db"
 db = SQLAlchemy(app)
 Base = automap_base()
 Base.prepare(db.engine, reflect = True)
-Fixtures = Base.classes.fixtures
+Fixtures = Base.classes.import
 
 @app.route("/")
 def index():
