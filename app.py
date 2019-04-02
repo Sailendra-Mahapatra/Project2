@@ -15,7 +15,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///../data/china_trade.sqlite"
 db = SQLAlchemy(app)
 Base = automap_base()
 Base.prepare(db.engine, reflect = True)
-Fixtures = Base.classes.import
+Imports = Base.classes.imports
+Exports = Base.classes.export
 
 @app.route("/")
 def index():
