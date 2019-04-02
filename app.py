@@ -21,7 +21,7 @@ Exports = Base.classes.export
 def index():
     return render_template("index.html")
 
-@app.route("/")
+@app.route("/commodity")
 def names():
     start = "getting started"
     return print(start)
