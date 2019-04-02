@@ -21,10 +21,24 @@ Exports = Base.classes.export
 def index():
     return render_template("index.html")
 
-@app.route("/commodity")
+@app.route("/commodity/{HSCODE}")
 def names():
-    start = "getting started"
-    return print(start)
+    stmt = db.session.query(Imports).statement
+    df = pd.read_sql_query(stmt, db.session.bind)
+
+    sel = [
+        Imports.Description,
+        Imports.YTDValue,
+        Imports.MoValue,
+        Imports.Period,
+        Imports.HSCODE
+    ]
+    results =  session.query(*sel).filter(Imports.HSC == HSCODE).all()
+    hsc_data = {}
+    for result in results:
+        hsc_data["Description"] = result[4]
+
+    return jsonify(hsc_data)
 # need to map out our routes for our server side api
 
 
