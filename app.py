@@ -7,24 +7,38 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 from flask import Flask, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
-import gunicorn
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///../data/china_trade.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///data/china_trade.sqlite"
 db = SQLAlchemy(app)
 Base = automap_base()
 Base.prepare(db.engine, reflect = True)
-Fixtures = Base.classes.import
+Imports = Base.classes.imports
+Exports = Base.classes.export
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
-@app.route("/")
+@app.route("/commodity/{HSCODE}")
 def names():
-    start = "getting started"
-    return print(start)
+    stmt = db.session.query(Imports).statement
+    df = pd.read_sql_query(stmt, db.session.bind)
+
+    sel = [
+        Imports.Description,
+        Imports.YTDValue,
+        Imports.MoValue,
+        Imports.Period,
+        Imports.HSCODE
+    ]
+    results =  session.query(*sel).filter(Imports.HSC == HSCODE).all()
+    hsc_data = {}
+    for result in results:
+        hsc_data["Description"] = result[4]
+
+    return jsonify(hsc_data)
 # need to map out our routes for our server side api
 
 
