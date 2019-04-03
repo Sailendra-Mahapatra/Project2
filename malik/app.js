@@ -1,26 +1,26 @@
 // margin
 var margin = {top: 50, right: 50, bottom: 50, left: 50},
-    width = 700 - margin.right - margin.left,
-    height = 700 - margin.top - margin.bottom,
-    radius = 250;
+    width = 600 - margin.right - margin.left,
+    height = 600 - margin.top - margin.bottom,
+    radius = 200;
 
 
 var color = d3.scaleOrdinal()
-.range(["#BBDEFB", "#90CAF9", "#64B5F6", "#42A5F5", "#2196F3", "#1E88E5", "#1976D2","#004d99","#003366","#001a33"]);
+.range(["#BBDEFB", "#90CAF9", "#64B5F6", "#42A5F5", "#2196F3", "#1E88E5", "#1976D2","#004d99","0099FF","00CCFF"]);
 
 var arc = d3.arc()
     .outerRadius(radius - 10)
     .innerRadius(0);
 
 // donut chart arc
-// var arc2 = d3.arc()
-//     .outerRadius(radius - 10)
-//     .innerRadius(radius - 70);
+var arc2 = d3.arc()
+    .outerRadius(radius - 10)
+    .innerRadius(radius - 10);
 
 // arc for the labels position
 var labelArc = d3.arc()
-    .outerRadius(radius - 40)
-    .innerRadius(radius - 40);
+    .outerRadius(0)
+    .innerRadius(radius+150);
 
 // generate pie chart and donut chart
 var pie = d3.pie()
@@ -34,15 +34,15 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-// define the svg donut chart
-// var svg2 = d3.select("body").append("svg")
-//     .attr("width", width)
-//     .attr("height", height)
-//   .append("g")
-//     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+// define the svg 2nd chart
+var svg2 = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 // import data 
-d3.csv("data_2015.csv", function(error, data) {
+d3.csv("data_2015_export.csv", function(error, data) {
   if (error) throw error;
     
     // parse data
