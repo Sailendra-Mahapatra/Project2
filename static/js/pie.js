@@ -43,11 +43,12 @@ var svg = d3.select(".card-body").append("svg")
 
 // import data 
 d3.json("../pie/2015").then(function(data) {
-   console.log(typeof data)
+  //  console.log(data)
     // parse data
     data.forEach(function(d){
-        d.total = d.total;
+        d.total = +d.total;
         d.HSC = d.HSC;
+        d.Description = d.Description
        console.log(d.total)
     });
    
@@ -60,7 +61,7 @@ d3.json("../pie/2015").then(function(data) {
   // append path 
   g.append("path")
       .attr("d", arc)
-      .style("fill", function(d) { return color(d.data.Commodity); })
+      .style("fill", function(d) { return color(d.data.HSC); })
     // transition 
     .transition()
       .ease(d3.easeLinear)
@@ -74,7 +75,7 @@ d3.json("../pie/2015").then(function(data) {
       .duration(2000)
     .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
       .attr("dy", ".35em")
-      .text(function(d) { return d.data.Commodity; });
+      .text(function(d) { return d.data.Description; });
     
 
     // "g element is a container used to group other SVG elements"

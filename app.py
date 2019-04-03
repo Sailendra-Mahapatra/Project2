@@ -102,7 +102,7 @@ def pies(year):
     data_2015 = data_2015.reset_index()
 
     data_2015= data_2015.nlargest(10,"total")
-    data_2015= data_2015.to_dict()
+    data_2015= data_2015.to_dict("records")
     return jsonify(data_2015)#need to fix the dict
 if __name__ == "__main__":
     app.run()
