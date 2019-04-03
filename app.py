@@ -20,7 +20,7 @@ Exports = Base.classes.export
 
 IndImports = Base.classes.hs2import
 YRImports = Base.classes.yrhs2import
-YRExports = Base.classes.hs2export
+YRExports = Base.classes.yrhs2export
 @app.route("/")
 def index():
     return render_template("index.html")
