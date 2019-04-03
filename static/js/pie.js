@@ -1,3 +1,4 @@
+
 // margin
 var margin = {top: 50, right: 50, bottom: 50, left: 50},
     width = 700 - margin.right - margin.left,
@@ -26,9 +27,8 @@ var labelArc = d3.arc()
 var pie = d3.pie()
     .sort(null)
     .value(function(d) { return d.total; });
-
 // define the svg for pie chart
-var svg = d3.select("body").append("svg")
+var svg = d3.select(".card-body").append("svg")
     .attr("width", width)
     .attr("height", height)
   .append("g")
@@ -42,15 +42,15 @@ var svg = d3.select("body").append("svg")
 //     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 // import data 
-d3.csv("../malik/data_2015.csv", function(error, data) {
-  if (error) throw error;
-    
+d3.json("../pie/2015").then(function(data) {
+   console.log(typeof data)
     // parse data
-    data.forEach(function(d) {
-        d.total = +d.total;
-        d.Commodity = d.Commodity;
-    })
-
+    data.forEach(function(d){
+        d.total = d.total;
+        d.HSC = d.HSC;
+       console.log(d.total)
+    });
+   
   // "g element is a container used to group other SVG elements"
   var g = svg.selectAll(".arc")
       .data(pie(data))
@@ -115,3 +115,4 @@ function tweenPie(b) {
 //   var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
 //   return function(t) { return arc2(i(t)); };
 // }
+

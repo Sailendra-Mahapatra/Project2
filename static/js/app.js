@@ -42,7 +42,7 @@ var svg = d3.select("body").append("svg")
 //     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 // import data 
-d3.csv("../malik/data_2015.csv", function(error, data) {
+d3.json("/pie/data_2015.csv", function(error, data) {
   if (error) throw error;
     
     // parse data
