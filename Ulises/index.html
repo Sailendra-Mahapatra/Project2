@@ -1,0 +1,281 @@
+<!doctype html>
+<meta charset="utf-8">
+
+<!-- load D3js -->
+<script src="//d3plus.org/js/d3.js"></script>
+
+<!-- load D3plus after D3js -->
+<script src="//d3plus.org/js/d3plus.js"></script>
+
+<!-- create container element for visualization -->
+<div id="viz"></div>
+
+<script>
+
+
+  var trade_war_data = [
+    {
+      "Comm Code": 8800,
+   "Commodity": "CIVILIAN AIRCRAFT, ENGINES, AND PARTS",
+   "total": 16173559860
+ },
+ {
+   "Comm Code": 1201,
+   "Commodity": "SOYBEANS, WHETHER OR NOT BROKEN",
+   "total": 11707154759
+ },
+ {
+   "Comm Code": 8703,
+   "Commodity": "MOTOR CARS & VEHICLES FOR TRANSPO",
+   "total": 9787269691
+ },
+ {
+   "Comm Code": 8542,
+   "Commodity": "ELECTRONIC INTEGRATED CIRCUITS & MICROASSEMBL, PTS",
+   "total": 3937127797
+ },
+ {
+   "Comm Code": 8517,
+   "Commodity": "ELECTRIC APPARATUS FOR LINE TEL",
+   "total": 2485600493
+ },
+ {
+   "Comm Code": 1007,
+   "Commodity": "GRAIN SORGHUM",
+   "total": 2078016499
+ },
+ {
+   "Comm Code": 5201,
+   "Commodity": "COTTON, NOT CARDED OR COMBED",
+   "total": 1966348354
+ },
+ {
+   "Comm Code": 8486,
+   "Commodity": "MACH/APPS FOR MANUFCT OF SEMIC",
+   "total": 1937503541
+ },
+ {
+   "Comm Code": 8708,
+   "Commodity": "PARTS & ACCESS FOR MOTOR",
+   "total": 1915389835
+ },
+ {
+   "Comm Code": 8471,
+   "Commodity": "AUTOMATIC DATA PROCESS MACHINES;",
+   "total": 1844323017
+ },
+ {
+   "Comm Code": 4101,
+   "Commodity": "RAW HIDES & SKINS OF BOVINE OR EQUIN",
+   "total": 1607042706
+ },
+ {
+   "Comm Code": 4707,
+   "Commodity": "WASTE AND SCRAP OF PAPER OR PAPERBOARD",
+   "total": 1515944362
+ },
+ {
+   "Comm Code": 4407,
+   "Commodity": "WOOD SAWN OR CHIPPED LENGTH, SLICED ETC, OV6MM TH",
+   "total": 1458637806
+ },
+ {
+   "Comm Code": 9027,
+   "Commodity": "INST ETC FOR PHYSICAL ETC",
+   "total": 1421374978
+ },
+ {
+   "Comm Code": 2303,
+   "Commodity": "RESIDUES OF STARCH MFR OR SU",
+   "total": 1390302187
+ },
+ {
+   "Comm Code": 9018,
+   "Commodity": "MEDICAL, SURGICAL, DENTAL",
+   "total": 1377861890
+ },
+ {
+   "Comm Code": 7404,
+   "Commodity": "COPPER WASTE AND SCRAP",
+   "total": 1320988278
+ },
+ {
+   "Comm Code": 4703,
+   "Commodity": "CHEMICAL WOODPULP, SODA OR SULFATE, NOT DISSOLY GR",
+   "total": 1214520697
+ },
+ {
+   "Comm Code": 3907,
+   "Commodity": "POLYETHERS, EXPOXIDES & POL",
+   "total": 1148067206
+ },
+ {
+   "Comm Code": 4403,
+   "Commodity": "WOOD IN THE ROUGH, STRIPPED OR NOT OF SAPWOOD ETC",
+   "total": 1139636111
+ },
+ {
+   "Comm Code": 8431,
+   "Commodity": "PARTS FOR MACHINERY OF HEADINGS",
+   "total": 1055342311
+ },
+ {
+   "Comm Code": 8541,
+   "Commodity": "SEMICONDUCTOR DEVICES; LIGH",
+   "total": 1002331898
+ },
+ {
+   "Comm Code": 8413,
+   "Commodity": "PUMPS FOR LIQUIDS; LIQUID ELEVATORS; PARTS THEREOF",
+   "total": 988374820
+ },
+ {
+   "Comm Code": 7602,
+   "Commodity": "ALUMINUM WASTE AND SCRAP",
+   "total": 959329543
+ },
+ {
+   "Comm Code": 9030,
+   "Commodity": "OSCILLOSCOPES, SPECTRUM ANAL",
+   "total": 904592394
+ },
+ {
+   "Comm Code": 8481,
+   "Commodity": "TAPS, COCKS, VALVES ETC FOR PIPES, TANKS ETC, PTS",
+   "total": 900538866
+ },
+ {
+   "Comm Code": 2711,
+   "Commodity": "PETROLEUM GASES & OTHER GASEOUS HYDROCARBONS",
+   "total": 874720007
+ },
+ {
+   "Comm Code": 3004,
+   "Commodity": "MEDICAMENTS NESOI, MIXED O",
+   "total": 677003727
+ },
+ {
+   "Comm Code": 3901,
+   "Commodity": "POLYMERS OF ETHYLENE, IN PRIMARY FORMS",
+   "total": 668585922
+ },
+ {
+   "Comm Code": 8536,
+   "Commodity": "ELECTRICAL APPARATUS FOR",
+   "total": 664517048
+ },
+ {
+   "Comm Code": 303,
+   "Commodity": "FISH, FROZEN (NO FISH FILLETS OR OTHER FISH MEAT)",
+   "total": 648124766
+ },
+ {
+   "Comm Code": 9022,
+   "Commodity": "X-RAY ETC APPARATUS; TUB",
+   "total": 643612798
+ },
+ {
+   "Comm Code": 8408,
+   "Commodity": "COMPRESSION-IGNITION INTERNAL COMB PISTON ENGINES",
+   "total": 594613806
+ },
+ {
+   "Comm Code": 2902,
+   "Commodity": "CYCLIC HYDROCARBONS",
+   "total": 580576223
+ },
+ {
+   "Comm Code": 8473,
+   "Commodity": "PARTS ETC FOR TYPEWRITERS & OTHER OFFICE MACHINES",
+   "total": 569256509
+ },
+ {
+   "Comm Code": 8537,
+   "Commodity": "BOARDS, PANELS ETC ELEC SW",
+   "total": 561434121
+ },
+ {
+   "Comm Code": 9880,
+   "Commodity": "LOW VALUE EXP SHP; CANADIAN. EST LATE RECEIPTS",
+   "total": 554734265
+ },
+ {
+   "Comm Code": 2401,
+   "Commodity": "TOBACCO, UNMANUFACTURED; TOBACCO REFUSE",
+   "total": 553681155
+ },
+ {
+   "Comm Code": 3815,
+   "Commodity": "REACTION INITIATORS & ACCELER & CATALYT PREP NESOI",
+   "total": 533271889
+ },
+ {
+   "Comm Code": 9031,
+   "Commodity": "MACHINES, NESOI IN CHAPTER 90; PROFILE PROJECT, PT",
+   "total": 512930404
+ },
+ {
+   "Comm Code": 3822,
+   "Commodity": "COMPOSITE DIAGNOSTIC/LAB REAGENTS, EXC PHARMACEUT",
+   "total": 495820423
+ },
+ {
+   "Comm Code": 8421,
+   "Commodity": "CENTRIFUGES; FILTER ETC MACH FOR LIQ OR GASES; P",
+   "total": 495237757
+ },
+ {
+   "Comm Code": 3824,
+   "Commodity": "BINDERS FOR FOUND MOLDS;",
+   "total": 486727122
+ },
+ {
+   "Comm Code": 8479,
+   "Commodity": "MACHINES ETC HAVING INDIVIDUAL FUNCTIONS NESOI, PT",
+   "total": 473195534
+ },
+ {
+   "Comm Code": 4702,
+   "Commodity": "CHEMICAL WOODPULP, DISSOLVING GRADES",
+   "total": 469190120
+ },
+ {
+   "Comm Code": 7204,
+   "Commodity": "FERROUS WASTE & SCRAP; REMELT SCR IRON/STEEL INGOT",
+   "total": 467850817
+ },
+ {
+   "Comm Code": 2710,
+   "Commodity": "OIL (NOT CRUDE) FROM PETR",
+   "total": 465073298
+ },
+ {
+   "Comm Code": 9021,
+   "Commodity": "ORTHOPEDIC APPL; ARTIF BODY PT",
+   "total": 456536767
+ },
+ {
+   "Comm Code": 8544,
+   "Commodity": "INSULATED WIRE, CABLE ETC;",
+   "total": 439954327
+ },
+ {
+   "Comm Code": 3904,
+   "Commodity": "POLYMERS OF VINYL CHLORIDE ETC., IN PRIMARY FORMS",
+   "total": 430121208
+ }]
+ 
+
+
+
+
+  // instantiate d3plus
+  var visualization = d3plus.viz()
+    .container("#viz")  // container DIV to hold the visualization
+    .data(trade_war_data)  // data to use with the visualization
+    .type("tree_map")   // visualization type
+    .id("Commodity")         // key for which our data is unique on
+    .size("total")      // sizing of blocks
+    .draw()             // finally, draw the visualization!
+
+</script>

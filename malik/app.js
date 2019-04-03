@@ -48,7 +48,7 @@ d3.csv("data_2015_export.csv", function(error, data) {
     // parse data
     data.forEach(function(d) {
         d.total = +d.total;
-        d.Commodity = d.Commodity;
+        d.Commodity = d.HSC;
     })
 
   // "g element is a container used to group other SVG elements"
