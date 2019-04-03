@@ -1,4 +1,4 @@
-
+function buildPie(piedate, inout, renderloc){
 // margin
 var margin = {top: 50, right: 50, bottom: 50, left: 50},
     width = 700 - margin.right - margin.left,
@@ -28,7 +28,7 @@ var pie = d3.pie()
     .sort(null)
     .value(function(d) { return d.total; });
 // define the svg for pie chart
-var svg = d3.select(".card-body").append("svg")
+var svg = d3.select(renderloc).append("svg")
     .attr("width", width)
     .attr("height", height)
   .append("g")
@@ -42,7 +42,7 @@ var svg = d3.select(".card-body").append("svg")
 //     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 // import data 
-d3.json("../pie/2015").then(function(data) {
+d3.json(inout+"/pie/"+piedate).then(function(data) {
   //  console.log(data)
     // parse data
     data.forEach(function(d){
@@ -116,4 +116,17 @@ function tweenPie(b) {
 //   var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
 //   return function(t) { return arc2(i(t)); };
 // }
+};
 
+
+function optionChanged(newdate) {
+  // //   // Fetch new data each time a new sample is selected
+  console.log(newdate)
+  buildPie(newdate, "imports", "#import-pie")
+  buildPie(newdate, "exports", "#export-pie")
+  }
+function init(){
+  buildPie("2018", "imports", "#import-pie")
+  buildPie("2018", "exports", "#export-pie")
+}
+init()

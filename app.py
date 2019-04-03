@@ -17,8 +17,10 @@ Base = automap_base()
 Base.prepare(db.engine, reflect = True)
 Imports = Base.classes.imports
 Exports = Base.classes.export
+
 IndImports = Base.classes.hs2import
 YRImports = Base.classes.yrhs2import
+YRExports = Base.classes.hs2export
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -89,7 +91,7 @@ def slices(hsc, year):
         hsc_ind_imports["HSC"] = result[3] 
 
     return jsonify(hsc_ind_imports)
-@app.route("/pie/<year>")
+@app.route("/imports/pie/<year>")
 def pies(year):
 
     stmt = db.session.query(YRImports).statement
@@ -103,6 +105,22 @@ def pies(year):
 
     data_2015= data_2015.nlargest(10,"total")
     data_2015= data_2015.to_dict("records")
-    return jsonify(data_2015)#need to fix the dict
+    return jsonify(data_2015)
+
+@app.route("/exports/pie/<year>")
+def expies(year):
+
+    stmt = db.session.query(YRExports).statement
+    df = pd.read_sql_query(stmt, db.session.bind)
+    df["YTDValue"] =pd.to_numeric(df["YTDValue"])
+    first_2015 = df[df["Period"].str.contains(f"{year}")]
+    data_2015 = first_2015.groupby(["HSC","Description","Period"])["YTDValue"].sum()
+    test= pd.DataFrame({"total" : data_2015})
+    data_2015= test.nlargest(10,"total")
+    data_2015 = data_2015.reset_index()
+
+    data_2015= data_2015.nlargest(10,"total")
+    data_2015= data_2015.to_dict("records")
+    return jsonify(data_2015)    
 if __name__ == "__main__":
     app.run()
