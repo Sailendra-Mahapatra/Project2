@@ -24,6 +24,6 @@ d3.json(inout+"/slice/"+hsc+"/"+bardate).then(function(data) {
         data.forEach(function(d){
             d.total = +d.total;
             d.HSC = d.HSC;
-            d.Description = d.Description
+            d.month = d.Period
             console.log(d.total)
         })
