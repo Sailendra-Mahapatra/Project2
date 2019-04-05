@@ -8,62 +8,10 @@
 <script src="//d3plus.org/js/d3plus.js"></script>
 
 <!-- create container element for visualization -->
-<h1>2015</h1>
+
 <div id="viz"></div>
-<br>
-<h1>2016</h1>
-<div id="viz_2"></div>
-<br>
-<h1>2017</h1>
-<div id="viz_3"></div>
-<br>
-<h1>2018</h1>
-<div id="viz_4"></div>
+
 
 <script src="json_data.js"></script>
+<script src="treemap.js"></script>
 
-<script>
-  // instantiate d3plus
-  var visualization = d3plus.viz()
-    .container("#viz")  // container DIV to hold the visualization
-    .data(trade_war_data_2015)  // data to use with the visualization
-    .type("tree_map")   // visualization type
-    .id("Commodity")         // key for which our data is unique on
-    .size("total")      // sizing of blocks
-    .draw()             // finally, draw the visualization!
-
-</script>
-<script>
-  // instantiate d3plus
-  var visualization = d3plus.viz()
-    .container("#viz_2")  // container DIV to hold the visualization
-    .data(trade_war_data_2016)  // data to use with the visualization
-    .type("tree_map")   // visualization type
-    .id("Commodity")         // key for which our data is unique on
-    .size("total")      // sizing of blocks
-    .draw()             // finally, draw the visualization!
-
-</script>
-
-<script>
-  // instantiate d3plus
-  var visualization = d3plus.viz()
-    .container("#viz_3")  // container DIV to hold the visualization
-    .data(trade_war_data_2017)  // data to use with the visualization
-    .type("tree_map")   // visualization type
-    .id("Commodity")         // key for which our data is unique on
-    .size("total")      // sizing of blocks
-    .draw()             // finally, draw the visualization!
-
-</script>
-<script>
-  // instantiate d3plus
-  var visualization = d3plus.viz()
-    .container("#viz_4")  // container DIV to hold the visualization
-    .data(trade_war_data_2018)  // data to use with the visualization
-    .type("tree_map")   // visualization type
-    .id("Commodity")         // key for which our data is unique on
-    .size("total")      // sizing of blocks
-    .draw()             // finally, draw the visualization!
-
-</script>
