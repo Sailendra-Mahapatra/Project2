@@ -17,7 +17,6 @@ Base = automap_base()
 Base.prepare(db.engine, reflect = True)
 Imports = Base.classes.imports
 Exports = Base.classes.export
-
 IndImports = Base.classes.hs2import
 YRImports = Base.classes.yrhs2import
 YRExports = Base.classes.yrhs2export
