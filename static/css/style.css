@@ -18,3 +18,21 @@
   /* .arc2 path {
     stroke: #fff;
   } */
+
+  .area {
+    fill: steelblue;
+    clip-path: url(#clip);
+  }
+  
+  .zoom {
+    cursor: move;
+    fill: none;
+    pointer-events: all;
+  }
+  .bar {
+	  fill: steelblue;
+	}
+
+	.bar:hover {
+	  fill: brown;
+	}
