@@ -17,10 +17,7 @@ Base = automap_base()
 Base.prepare(db.engine, reflect = True)
 Imports = Base.classes.imports
 Exports = Base.classes.export
-<<<<<<< HEAD
-=======
 barImports = Base.classes.imports
->>>>>>> 8947ac7634462b2367b89382f3bd6a5d9347aa88
 IndImports = Base.classes.hs2import
 YRImports = Base.classes.yrhs2import
 YRExports = Base.classes.yrhs2export
@@ -156,6 +153,8 @@ def trees(year):
 def bars(year):
     stmt = db.session.query(barImports).statement
     df = pd.read_sql_query(stmt, db.session.bind)
+    df["MoValue"] =pd.to_numeric(df["MoValue"])
+
     df = df[df["Period"].str.contains(f"{year}")]
     products = df.loc[df["HSC"] == 3915]
     products= products.to_dict("records")
