@@ -97,7 +97,7 @@ def pies(year):
 
     stmt = db.session.query(YRImports).statement
     df = pd.read_sql_query(stmt, db.session.bind)
-    df["YTDValue"] =pd.to_numeric(df["YTDValue"])
+    df["MoValue"] =pd.to_numeric(df["MoValue"])
     first_2015 = df[df["Period"].str.contains(f"{year}")]
     data_2015 = first_2015.groupby(["HSC","Description","Period"])["YTDValue"].sum()
     test= pd.DataFrame({"total" : data_2015})
@@ -113,7 +113,7 @@ def expies(year):
 
     stmt = db.session.query(YRExports).statement
     df = pd.read_sql_query(stmt, db.session.bind)
-    df["YTDValue"] =pd.to_numeric(df["YTDValue"])
+    df["MoValue"] =pd.to_numeric(df["MoValue"])
     first_2015 = df[df["Period"].str.contains(f"{year}")]
     data_2015 = first_2015.groupby(["HSC","Description","Period"])["YTDValue"].sum()
     test= pd.DataFrame({"total" : data_2015})
