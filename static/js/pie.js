@@ -42,7 +42,7 @@ var svg = d3.select(renderloc).append("svg")
 //     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 // import data 
-d3.json(inout+"/pie/"+piedate).then(function(data) {
+d3.json(inout+"/tree/"+piedate).then(function(data) {
   //  console.log(data)
     // parse data
     data.forEach(function(d){

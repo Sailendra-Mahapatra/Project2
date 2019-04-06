@@ -62,15 +62,28 @@ china_data_import = pd.DataFrame({"YTD Value" : yrvalue,
                           "Comm Code": code})
 
 china_data_export["YTD Value"] =pd.to_numeric(china_data_export["YTD Value"])
+china_data_import["YTD Value"] =pd.to_numeric(china_data_import["YTD Value"])
 
-first_2015 = china_data_export[china_data_export["Period"].str.contains("2015")]
+def yearly_data(trade,year):
+    data = trade[trade["Period"].str.contains(year)]
+    data = data.groupby(["Comm Code","Commodity"])["YTD Value"].max()
+    data = pd.DataFrame({"total" : data})
+#     data = data.nlargest(10,"total")
+    data = data.reset_index()
+    
+    return data
 
-data_2015 = first_2015.groupby(["Comm Code","Commodity"])["YTD Value"].sum()
-test= pd.DataFrame({"total" : data_2015})
-data_2015= test.nlargest(10,"total")
-data_2015 = data_2015.reset_index()
+data_2015_import = yearly_data(china_data_import,"2015")
+data_2015_export = yearly_data(china_data_export,"2015")
 
-data_2015= data_2015.nlargest(10,"total")
+data_2016_import = yearly_data(china_data_import,"2016")
+data_2016_export = yearly_data(china_data_export,"2016")
+
+data_2017_import = yearly_data(china_data_import,"2017")
+data_2017_export = yearly_data(china_data_export,"2017")
+
+data_2018_import = yearly_data(china_data_import,"2018")
+data_2018_export = yearly_data(china_data_export,"2018")
 
 
 
