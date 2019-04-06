@@ -153,6 +153,8 @@ def trees(year):
 def bars(year):
     stmt = db.session.query(barImports).statement
     df = pd.read_sql_query(stmt, db.session.bind)
+    df["MoValue"] =pd.to_numeric(df["MoValue"])
+
     df = df[df["Period"].str.contains(f"{year}")]
     products = df.loc[df["HSC"] == 3915]
     products= products.to_dict("records")

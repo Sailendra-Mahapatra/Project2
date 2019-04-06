@@ -1,6 +1,6 @@
 function buildPie(piedate, inout, renderloc){
 // margin
-var margin = {top: 20, right: 20, bottom: 50, left: 20},
+var margin = {top: 50, right: 50, bottom: 50, left: 50},
     width = 400 - margin.right - margin.left,
     height = 400 - margin.top - margin.bottom,
     radius = 150;
@@ -49,7 +49,8 @@ d3.json(inout+"/pie/"+piedate).then(function(data) {
         d.total = +d.total;
         d.HSC = d.HSC;
         d.Description = d.Description
-      //  console.log(d.total)
+        d.data 
+       console.log(d.total)
     });
    
   // "g element is a container used to group other SVG elements"
