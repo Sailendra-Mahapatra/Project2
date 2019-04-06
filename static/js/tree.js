@@ -9,9 +9,9 @@
               d.Description = d.Description
               d=d
 
-             console.log(d)
+        //      console.log(d)
           
-          console.log(data)
+        //   console.log(data)
 
     var visualization = d3plus.viz()
     .container("#treemap")  // container DIV to hold the visualization
