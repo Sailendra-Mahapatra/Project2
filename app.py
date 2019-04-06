@@ -17,6 +17,10 @@ Base = automap_base()
 Base.prepare(db.engine, reflect = True)
 Imports = Base.classes.imports
 Exports = Base.classes.export
+<<<<<<< HEAD
+=======
+barImports = Base.classes.imports
+>>>>>>> 8947ac7634462b2367b89382f3bd6a5d9347aa88
 IndImports = Base.classes.hs2import
 YRImports = Base.classes.yrhs2import
 YRExports = Base.classes.yrhs2export
@@ -94,11 +98,11 @@ def slices(hsc, year):
 @app.route("/imports/pie/<year>")
 def pies(year):
 
-    stmt = db.session.query(YRImports).statement
+    stmt = db.session.query(Imports).statement
     df = pd.read_sql_query(stmt, db.session.bind)
-    df["YTDValue"] =pd.to_numeric(df["YTDValue"])
+    df["MoValue"] =pd.to_numeric(df["MoValue"])
     first_2015 = df[df["Period"].str.contains(f"{year}")]
-    data_2015 = first_2015.groupby(["HSC","Description","Period"])["YTDValue"].sum()
+    data_2015 = first_2015.groupby(["HSC","Description"])["MoValue"].sum()
     test= pd.DataFrame({"total" : data_2015})
     data_2015= test.nlargest(10,"total")
     data_2015 = data_2015.reset_index()
@@ -110,11 +114,11 @@ def pies(year):
 @app.route("/exports/pie/<year>")
 def expies(year):
 
-    stmt = db.session.query(YRExports).statement
+    stmt = db.session.query(Exports).statement
     df = pd.read_sql_query(stmt, db.session.bind)
-    df["YTDValue"] =pd.to_numeric(df["YTDValue"])
+    df["MoValue"] =pd.to_numeric(df["MoValue"])
     first_2015 = df[df["Period"].str.contains(f"{year}")]
-    data_2015 = first_2015.groupby(["HSC","Description","Period"])["YTDValue"].sum()
+    data_2015 = first_2015.groupby(["HSC","Description"])["MoValue"].sum()
     test= pd.DataFrame({"total" : data_2015})
     data_2015= test.nlargest(10,"total")
     data_2015 = data_2015.reset_index()
@@ -128,13 +132,13 @@ def trees(year):
     stmt = db.session.query(Imports).statement
     df = pd.read_sql_query(stmt, db.session.bind)
     first_2015 = df[df["Period"].str.contains(f"{year}")]
-    data_2015 = first_2015.groupby(["HSC","Description","Period"])["YTDValue"].sum()
+    data_2015 = first_2015.groupby(["Description", "HSC"])["MoValue"].sum()
     test= pd.DataFrame({"total" : data_2015})
     data_2015= test.nlargest(50,"total")
     data_2015 = data_2015.reset_index()
 
 
-    data_2015= data_2015.nlargest(10,"total")
+    data_2015= data_2015.nlargest(50,"total")
     data_2015= data_2015.to_dict("records")
     return jsonify(data_2015)
 
@@ -148,7 +152,17 @@ def trees(year):
 #     data_2015= test.nlargest(50,"total")
 #     data_2015 = data_2015.reset_index()
 
+@app.route("/imports/bars/<year>")
+def bars(year):
+    stmt = db.session.query(barImports).statement
+    df = pd.read_sql_query(stmt, db.session.bind)
+    df = df[df["Period"].str.contains(f"{year}")]
+    products = df.loc[df["HSC"] == 3915]
+    products= products.to_dict("records")
 
+    return jsonify(products)
 
 if __name__ == "__main__":
     app.run()
+
+
