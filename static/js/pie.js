@@ -123,10 +123,10 @@ function optionChanged(newdate) {
   // //   // Fetch new data each time a new sample is selected
   console.log(newdate)
   buildPie(newdate, "imports", "#import-pie")
-  buildPie(newdate, "exports", "#export-pie")
+  buildPie(newdate, "exports", "#import-pie")
   }
 function init(){
   buildPie("2018", "imports", "#import-pie")
-  buildPie("2018", "exports", "#export-pie")
+  buildPie("2018", "exports", "#import-pie")
 }
 init()

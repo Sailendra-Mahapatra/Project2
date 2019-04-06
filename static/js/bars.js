@@ -10,16 +10,17 @@ function buildBar(bardate) {//renderloc
 
 var container = d3.selectAll("#bars")
 
-var svg = container.append("svgs"),
+var svg = container.append("svg"),
 margin= {
-    top: 30,
-     right: 20, 
-     bottom: 30, 
+    top: 50,
+     right: 50, 
+     bottom: 50, 
      left: 50},
 width = +svg.attr("width") - margin.left - margin.right,
 height = +svg.attr("height") - margin.top - margin.bottom,
 g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    
+var parseTime = d3.timeParse("%d-%b-%y");
+  
 var x = d3.scaleBand().rangeRound([0, width]).padding(0.1);
 
 var y = d3.scaleLinear().rangeRound([height, 0]);
@@ -29,8 +30,7 @@ var y = d3.scaleLinear().rangeRound([height, 0]);
 //     .range([height, 0]);
                 
 
-
-d3.json("/imports/bars/"+bardate).then(function(data) {
+d3.json("/imports/bars/2018").then(function(data) {
     //  console.log(data)
         // parse data
         // data.forEach(function(d){
@@ -39,9 +39,9 @@ d3.json("/imports/bars/"+bardate).then(function(data) {
         // })
         console.log(data)
 
-        x.domain(data.map(function(d) { return d.Period}));
-        y.domain([0, d3.max(data, function(d){return d.MoValue})])
-  
+        x.domain(data.map(function(d) { return parseTime(d.Period)}));
+        y.domain([0, d3.max(data, function(d){return +d.MoValue})])
+        console.log( function(d){return +d.MoValue})
         g.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x))
@@ -61,18 +61,20 @@ d3.json("/imports/bars/"+bardate).then(function(data) {
         .enter().append("rect")
         .attr("class", "bar")
         .attr("x", function (d) {
-            return x(d.Period);
+            return x(parseTime(d.Period));
         })
         .attr("y", function (d) {
-            return y(Number(d.MoValue));
+            return y(Number(+d.MoValue));
         })
         .attr("width", x.bandwidth())
         .attr("height", function (d) {
-            return height - y(Number(d.MoValue));
+            return height - y(Number(+d.MoValue)) ;
         });
+       
+
     });
 }
-buildBar(2016, 3915)
+buildBar(2016)
 
 
 // svg.selectAll(".bar")
