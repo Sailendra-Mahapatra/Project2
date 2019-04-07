@@ -1,3 +1,6 @@
+body {
+	background-color: #778899	
+}
 .arc text {
     font: 8px sans-serif;
     text-anchor: middle;
@@ -53,11 +56,14 @@
   .card-header{
     margin-bottom:2%;
   }
-  
-  .big-card{
+  #bars{
+  	background-color: gainsboro
+  }
+  .card-body{
     padding-left:5%;
     margin-top:1%;
     margin-bottom: 5% 
+    background-color: grey
   }
 
   .footer {
@@ -85,4 +91,5 @@
       padding-right: 8%;
       margin-top: 8%;
       padding-bottom: 10%;
+
     }
