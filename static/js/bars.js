@@ -72,7 +72,7 @@ d3.json("/imports/bars/"+bardate).then(function(data) {
         });
     });
 }
-buildBar(2016, 3915)
+buildBar(2016)
 
 
 // svg.selectAll(".bar")
