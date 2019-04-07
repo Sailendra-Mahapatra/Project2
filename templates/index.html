@@ -49,17 +49,19 @@
 </nav>
 <!--start of cards-->
 <div class = "container-fluid"> 
-    <div class = row>
+  <div class = row>
         <!--selector-->
-        <div class ="col-md-2">
-            <div class="card text-black bg-light mt-1 mb-3"  style="max-width:100%;">             
-                <div class="card-body" id= "import-pie"> </div>
-            </div> 
+        <div class ="cards col-md-2" id= "import-pie">
+            <!-- <div class="card text-black bg-light mt-3 mb-1 mr-3"  style="max-width:100%;">             
+                <div class="card-body" > </div>
+            </div>  -->
         </div>
         <!--end selector-->
-        <!--Charterers Stats-->
-        <div class="col-md-5">
+        <!--Stats-->
+        <div class="col-md-6">
+            <div class="card text-black bg-light mt-3 mb-1 mr-2"  style="max-width:100%;">             
 
+            </div>
             <div class = "card bg-light text-white text-wrap small"  >
               <div class="card-header"> 
                 <div class="btn-toolbar  " role="toolbar" aria-label="Toolbar with button groups">
@@ -69,37 +71,38 @@
                       <input type="button" value="2017" onclick="optionChanged(this.value)" ></input>
                       <input type="button" value="2018" onclick="optionChanged(this.value)"></input>
                     </div>
+                  <input id= "search" class="form-control" type="text" placeholder="Search" aria-label="Search">                    
+                </select>    
               </div>
               <div class="card-body" id="bars"> </div>
             </div>
         </div>  
-
-        </div>  
           <!--END Charterers Stats-->
-          <div class ="col-md-2">
-              <div class="card text-black bg-light mt-1 mb-2"  style="max-width:100%;">
-                 
-                  <div class = "card-body" id="export-pie">
-          </div> 
-      </div> <!--end 1st row-->
-
-    </div>
+          <div class ="cards col-md-2" id="export-pie">
+            <!-- <div class="card mt-3 mb-3 pr-3 mr-2"  style="max-width:100%;">             
+                <div class = "card-body " ></div>
+            </div>  -->
+          </div>            
+  
+  </div> <!--end 1st row-->
+</div>
 <div class = "container-fluid">
     <div class = row>
         <div class ="col-md-12">
             <div class="card text-black bg-secondary mt-1 mb-3"  style="max-width:100%;">
-               <div class = "card-body" id= "treemap"></div>
-               <div class="card text-black bg-secondary mt-1 mb-3"  style="max-width:100%;">
+                <div class = "card-body" id= "treemap"></div>
+                <div class="card text-black bg-secondary mt-1 mb-3"  style="max-width:100%;">
                 place holder
-            </div> 
-</div>    
-</div> 
+                </div> 
+              </div>    
+          </div> 
 <!--end of cards-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
     <!-- <script src="//d3plus.org/js/d3.js"></script>
     <script src="//d3plus.org/js/d3plus.js"></script>
      -->
      <script src="//d3js.org/d3.v5.min.js"></script>
+     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
     <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
@@ -107,9 +110,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
      <!-- <script src="{{ url_for('static', filename='js/bonus.js') }}"></script> -->
-    <script src="../static/js/pie.js"></script>
+     <!-- <script src="../static/js/app.js"></script> -->
+     <!-- <script src="../static/js/app.js"></script>
+
+     <script src="../static/js/pie.js"></script> -->
     <script src="../static/js/bars.js"></script>
-    <script src="../static/js/tree.js"></script>
+    
 
      <!-- <script src="../static/js/pie.js"></script> -->
 </body>
