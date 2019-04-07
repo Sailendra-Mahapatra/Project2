@@ -27,16 +27,16 @@ height = container.attr("height") -  margin.top - margin.bottom,
 g = container.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var parseTime = d3.timeParse("%Y-%m");
 
-var x = d3.scaleBand().rangeRound([0, width], .5).padding(.1);
+ d3.scaleBand().rangeRound([0, width], .5).padding(.1);
 
-var y = d3.scaleLinear().rangeRound([height, 0]);
+ d3.scaleLinear().rangeRound([height, 0]);
 // var x = d3.scaleBand()
 //     .range([0, width]);
 // var y = d3.scaleLinear()
 //     .range([height, 0]);
               
 
-d3.json("/imports/bars/"+bardate+"/8517").then(function(data) {
+d3.json("/imports/bars/2018").then(function(data) {
   //  console.log(data)
       // parse data
       // data.forEach(function(d){
@@ -44,10 +44,11 @@ d3.json("/imports/bars/"+bardate+"/8517").then(function(data) {
       //     d.month = d.Period
       // })
       console.log(data)
-
+     
       x.domain(data.map(function(d) { return parseTime(d.Period)}));
       y.domain([0, d3.max(data, function(d){return d.MoValue})])
 
+              
       g.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b")))
@@ -79,8 +80,37 @@ d3.json("/imports/bars/"+bardate+"/8517").then(function(data) {
       .attr("height", function (d) {
           return  height-y(Number(d.MoValue));
       });
+      d3.select("#filter")
+
+    d3.select("#search")
+      .on("keyup", function (){
+        var search_data = data,
+          text= this.value.trim();
+        var searchResults = search_data.map(function(r) {
+          var regex =- new RegExp("^"+ text+ ".*", "i");
+          if (regex.toLocaleString(r.Description)) {
+            return regex.exev(r.Description)
+          }
+        })
+      })  
   });
 }
+
+function buildSelector(date) {
+  d3.json("/imports/bars/"+ date).then(function(response){
+    selection= d3.select("#filter")
+    selection.html("");
+    var table = slection
+                  .append("table")
+                  .append("tbody")
+  Object.entries(respose).forEach(([key, value]) => {
+      var row = table.append("tr")
+      row.append("td").text(key, ": ")
+      row.append("td").text(value)
+  });              
+})
+}
+
 
 
 
@@ -165,7 +195,8 @@ function buildPie(piedate, inout, renderloc){
   
   
   };
-  
+
+ 
 
 function optionChanged(newdate) {
   console.log(newdate)
@@ -174,7 +205,6 @@ function optionChanged(newdate) {
   buildPie(newdate, "imports", "#import-pie")
   buildPie(newdate, "exports", "#export-pie")
   buildBar(newdate)
-
   console.log(newdate)
 
   }
@@ -183,6 +213,7 @@ function init(){
   buildPie("2018", "imports", "#import-pie")
   buildPie("2018", "exports", "#export-pie")
   buildBar("2018")
+  
 
 }
 
