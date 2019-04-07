@@ -11,8 +11,8 @@ function buildBar(bardate) {//renderloc
 
 var container = d3.selectAll("#bars")
 .append("svg")
-.attr("width", 900)
-.attr("height", 500)
+.attr("width", 500)
+.attr("height", 400)
                 
 
 var svg = d3.select("svg"),
@@ -26,7 +26,7 @@ height = container.attr("height") -  margin.top - margin.bottom,
 g = container.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var parseTime = d3.timeParse("%Y-%m");
   
-var x = d3.scaleBand().rangeRound([0, width]).padding(0.05);
+var x = d3.scaleBand().rangeRound([0, width], .5).padding(.1);
 
 var y = d3.scaleLinear().rangeRound([height, 0]);
 // var x = d3.scaleBand()
@@ -35,7 +35,7 @@ var y = d3.scaleLinear().rangeRound([height, 0]);
 //     .range([height, 0]);
                 
 
-d3.json("/imports/bars/2018").then(function(data) {
+d3.json("/imports/bars/"+bardate+"/3915").then(function(data) {
     //  console.log(data)
         // parse data
         // data.forEach(function(d){
@@ -49,14 +49,17 @@ d3.json("/imports/bars/2018").then(function(data) {
   
         g.append("g")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x))
+        .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b")))
     
         g.append("g")
-        .call(d3.axisLeft(y))
+        .call(d3.axisLeft(y)
+            .ticks(20)
+            .tickFormat(d3.formatPrefix(".1", 1e6)))
         .append("text")
         .attr("fill", "#000")
         .attr("transform", "rotate(-90)")
-        .attr("y", 6)
+         .attr("x", -5)
+        .attr("y", -15)
         .attr("dy", "0.71em")
         .attr("text-anchor", "end")
         .text("Monthly Trade Value");
@@ -77,9 +80,17 @@ d3.json("/imports/bars/2018").then(function(data) {
         });
     });
 }
-buildBar(2016)
 
-
+function optionChanged(newdate) {
+    // //   // Fetch new data each time a new sample is selected
+    console.log(newdate)
+    buildBar(newdate)
+    }
+  function init(){
+    buildBar("2018")
+  }
+  init()
+  
 // svg.selectAll(".bar")
 // .data(data)
 // .enter()

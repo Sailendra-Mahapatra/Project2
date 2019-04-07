@@ -149,14 +149,14 @@ def trees(year):
 #     data_2015= test.nlargest(50,"total")
 #     data_2015 = data_2015.reset_index()
 
-@app.route("/imports/bars/<year>")
-def bars(year):
+@app.route("/imports/bars/<year>/<hsc>")
+def bars(year, hsc):
     stmt = db.session.query(barImports).statement
     df = pd.read_sql_query(stmt, db.session.bind)
     df["MoValue"] =pd.to_numeric(df["MoValue"])
 
     df = df[df["Period"].str.contains(f"{year}")]
-    products = df.loc[df["HSC"] == 3915]
+    products = df.loc[df["HSC"] == int(hsc)]
     products= products.to_dict("records")
 
     return jsonify(products)
