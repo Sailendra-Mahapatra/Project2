@@ -25,7 +25,7 @@ width = container.attr("width") - margin.left - margin.right,
 height = container.attr("height") -  margin.top - margin.bottom,
 g = container.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var parseTime = d3.timeParse("%Y-%m");
-
+  
 var x = d3.scaleBand().rangeRound([0, width], .5).padding(.1);
 
 var y = d3.scaleLinear().rangeRound([height, 0]);
@@ -33,9 +33,9 @@ var y = d3.scaleLinear().rangeRound([height, 0]);
 //     .range([0, width]);
 // var y = d3.scaleLinear()
 //     .range([height, 0]);
-x.domain(data.map(function(d) { return parseTime(d.Period)}));
+                
 
-d3.json("/imports/bars/"+bardate+"/3915").then(function(data) {
+d3.json("/imports/bars/"+bardate+"/9999").then(function(data) {
     //  console.log(data)
         // parse data
         // data.forEach(function(d){
@@ -47,11 +47,11 @@ d3.json("/imports/bars/"+bardate+"/3915").then(function(data) {
         x.domain(data.map(function(d) { return parseTime(d.Period)}));
         y.domain([0, d3.max(data, function(d){return d.MoValue})])
   
-        g.append("g")
+        var xAxis = g.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b")))
     
-        g.append("g")
+        var yAxis = g.append("g")
         .call(d3.axisLeft(y)
             .ticks(20)
             .tickFormat(d3.formatPrefix(".1", 1e6)))
@@ -81,15 +81,35 @@ d3.json("/imports/bars/"+bardate+"/3915").then(function(data) {
     });
 }
 
-// function optionChanged(newdate) {
-//     // //   // Fetch new data each time a new sample is selected
-//     console.log(newdate)
-//     buildBar(newdate)
-//     }
-// function init(){
-//     buildBar("2018")
-//   }
-//   init()
+function update(data) {
+
+    var bar = g.selectAll(".bar")
+        .data(data);
+
+    bar.attr("class", "update")
+    bar.enter().append(".bar")
+        .attr("class", "enter")
+        .attr("x", function (d) {
+            return x(parseTime(d.Period));
+        })
+        .attr("y", function (d) {
+            return y(Number(d.MoValue));
+        })
+        .attr("width", x.bandwidth())
+        .attr("height", function (d) {
+            return  height-y(Number(d.MoValue));
+        });
+
+}
+function optionChanged(newdate) {
+    // //   // Fetch new data each time a new sample is selected
+    console.log(newdate)
+    buildBar(newdate)
+    }
+  function init(){
+    buildBar("2018")
+  }
+  init()
   
 // svg.selectAll(".bar")
 // .data(data)

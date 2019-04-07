@@ -36,7 +36,7 @@ var y = d3.scaleLinear().rangeRound([height, 0]);
 //     .range([height, 0]);
               
 
-d3.json("/imports/bars/"+bardate+"/3915").then(function(data) {
+d3.json("/imports/bars/"+bardate+"/8517").then(function(data) {
   //  console.log(data)
       // parse data
       // data.forEach(function(d){
