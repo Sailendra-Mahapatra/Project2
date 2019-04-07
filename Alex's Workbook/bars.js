@@ -10,23 +10,19 @@ function buildBar(bardate) {//renderloc
 // var parseTime = d3.timeParse("%d-%b-%y");
 
 var container = d3.selectAll("#bars")
-.append("svg")
-.attr("width", 900)
-.attr("height", 500)
-                
 
-var svg = d3.select("svg"),
+var svg = container.append("svg"),
 margin= {
     top: 30,
      right: 20, 
      bottom: 30, 
      left: 50},
-width = container.attr("width") - margin.left - margin.right,
-height = container.attr("height") -  margin.top - margin.bottom,
-g = container.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+width = svg.attr("width") - svgWidth ,
+height = svg.attr("height") - svgHeight,
+g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var parseTime = d3.timeParse("%Y-%m");
   
-var x = d3.scaleBand().rangeRound([0, width]).padding(0.05);
+var x = d3.scaleBand().rangeRound([0, width]).padding(0.1);
 
 var y = d3.scaleLinear().rangeRound([height, 0]);
 // var x = d3.scaleBand()
@@ -73,7 +69,7 @@ d3.json("/imports/bars/2018").then(function(data) {
         })
         .attr("width", x.bandwidth())
         .attr("height", function (d) {
-            return  height-y(Number(d.MoValue));
+            return  y(Number(d.MoValue)) + 100;
         });
     });
 }
