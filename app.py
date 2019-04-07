@@ -104,7 +104,7 @@ def pies(year):
     data_2015= test.nlargest(10,"total")
     data_2015 = data_2015.reset_index()
 
-    data_2015= data_2015.nlargest(10,"total")
+    data_2015= data_2015.nlargest(5,"total")
     data_2015= data_2015.to_dict("records")
     return jsonify(data_2015)
 
@@ -120,7 +120,7 @@ def expies(year):
     data_2015= test.nlargest(10,"total")
     data_2015 = data_2015.reset_index()
 
-    data_2015= data_2015.nlargest(10,"total")
+    data_2015= data_2015.nlargest(5,"total")
     data_2015= data_2015.to_dict("records")
     return jsonify(data_2015)    
 

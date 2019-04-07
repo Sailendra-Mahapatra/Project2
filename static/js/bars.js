@@ -25,7 +25,7 @@ width = container.attr("width") - margin.left - margin.right,
 height = container.attr("height") -  margin.top - margin.bottom,
 g = container.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var parseTime = d3.timeParse("%Y-%m");
-  
+
 var x = d3.scaleBand().rangeRound([0, width], .5).padding(.1);
 
 var y = d3.scaleLinear().rangeRound([height, 0]);
@@ -33,7 +33,7 @@ var y = d3.scaleLinear().rangeRound([height, 0]);
 //     .range([0, width]);
 // var y = d3.scaleLinear()
 //     .range([height, 0]);
-                
+x.domain(data.map(function(d) { return parseTime(d.Period)}));
 
 d3.json("/imports/bars/"+bardate+"/3915").then(function(data) {
     //  console.log(data)
@@ -81,15 +81,15 @@ d3.json("/imports/bars/"+bardate+"/3915").then(function(data) {
     });
 }
 
-function optionChanged(newdate) {
-    // //   // Fetch new data each time a new sample is selected
-    console.log(newdate)
-    buildBar(newdate)
-    }
-  function init(){
-    buildBar("2018")
-  }
-  init()
+// function optionChanged(newdate) {
+//     // //   // Fetch new data each time a new sample is selected
+//     console.log(newdate)
+//     buildBar(newdate)
+//     }
+// function init(){
+//     buildBar("2018")
+//   }
+//   init()
   
 // svg.selectAll(".bar")
 // .data(data)
