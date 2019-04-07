@@ -27,9 +27,9 @@ height = container.attr("height") -  margin.top - margin.bottom,
 g = container.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var parseTime = d3.timeParse("%Y-%m");
 
- d3.scaleBand().rangeRound([0, width], .5).padding(.1);
+ var x = d3.scaleBand().rangeRound([0, width], .5).padding(.1);
 
- d3.scaleLinear().rangeRound([height, 0]);
+var y=  d3.scaleLinear().rangeRound([height, 0]);
 // var x = d3.scaleBand()
 //     .range([0, width]);
 // var y = d3.scaleLinear()
@@ -43,8 +43,18 @@ d3.json("/imports/bars/2018").then(function(data) {
       //     d.total = +d.total;
       //     d.month = d.Period
       // })
+
+      d3.select("#search")
+      .on("keyup", function (){
+        var search_data = data,
+          text= this.value.trim();
+        var searchResults = search_data.map(function(r) {
+          var regex = new RegExp("^"+ text+ ".*", "i");
+          if (regex.test(r.Description)) {
+            return regex.exec(r.Description)[0]
+          }
       console.log(data)
-     
+      searchedData = data.filter(d => d.Description == searchResults)
       x.domain(data.map(function(d) { return parseTime(d.Period)}));
       y.domain([0, d3.max(data, function(d){return d.MoValue})])
 
@@ -80,17 +90,8 @@ d3.json("/imports/bars/2018").then(function(data) {
       .attr("height", function (d) {
           return  height-y(Number(d.MoValue));
       });
-      d3.select("#filter")
 
-    d3.select("#search")
-      .on("keyup", function (){
-        var search_data = data,
-          text= this.value.trim();
-        var searchResults = search_data.map(function(r) {
-          var regex =- new RegExp("^"+ text+ ".*", "i");
-          if (regex.toLocaleString(r.Description)) {
-            return regex.exev(r.Description)
-          }
+ 
         })
       })  
   });
