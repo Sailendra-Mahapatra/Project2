@@ -1,0 +1,8 @@
+import sqlite3
+import pandas as pd
+import os
+dat = sqlite3.connect('data.db')
+query = dat.execute("SELECT * From china_trade.sqlite")
+cols = [column[0] for column in query.description]
+results= pd.DataFrame.from_records(data = query.fetchall(), columns = cols)
+print(results)

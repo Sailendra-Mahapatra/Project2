@@ -34,11 +34,37 @@ d3.json(url, function(data) {
     data.forEach(d => {
         console.log(d);
         
+<<<<<<< HEAD
     });  
 }),
  function(error, data) {
   if (error) throw error;
   var keys = data.columns.slice(1);
+=======
+        if (d.type === "import") {
+            totalImp.push(d)
+        }
+        if(d.type === "export"){
+            totalExp.push(d)
+        }
+        
+	});
+	console.log(data)
+})
+    console.log(totalExp);
+    
+// functions for toggling between data
+function change(value){
+
+	if(value === 'import'){
+		update(totalImp);
+	}else if(value === 'export'){
+		update(totalExp);
+	}else{
+		update(bothData);
+	}
+}
+>>>>>>> 647e8af700e4b2aabb59eaf8b99b9ae03f0a521d
 
   
   x0.domain(data.map(function(d) { return d.year; }));
