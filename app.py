@@ -209,6 +209,7 @@ def bars():
 
     return jsonify(bothData)
 
+
 if __name__ == "__main__":
     app.run()
 
