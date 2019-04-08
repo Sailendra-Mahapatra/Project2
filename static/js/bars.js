@@ -80,10 +80,7 @@ d3.json("/imports/bars/"+bardate+"/9999").then(function(data) {
         });
     });
 }
-<<<<<<< HEAD
 buildBar(2016)
-=======
->>>>>>> 656caa269eeceb8fda6d9e1726fb5e715559a068
 
 function update(data) {
 
@@ -108,7 +105,7 @@ function update(data) {
 function optionChanged(newdate) {
     // //   // Fetch new data each time a new sample is selected
     console.log(newdate)
-    buildBar(newdate)
+    updateBar(newdate)
     }
   function init(){
     buildBar("2018")

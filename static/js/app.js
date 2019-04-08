@@ -1,5 +1,5 @@
 
-function buildBar(bardate, hsc, renderloc, optionChanged) {//renderloc
+function buildBar(bardate, hsc, renderloc, optionChanged(bardate)) {//renderloc
 
   var svgWidth = 900
   var svgHeight = 500
@@ -97,53 +97,43 @@ d3.json("/imports/bars/"+bardate+"/"+hsc).then(function(data) {
  
         
       })  
+
       function optionChanged(bardate){
-        var x = d3.scaleBand().rangeRound([0, width], .5).padding(.1);
 
-      var y=  d3.scaleLinear().rangeRound([height, 0]);
+        var svgWidth = 900
+        var svgHeight = 500
+      
+      //Create SVG
+      
+      // axisTicks = {qty: 5, outerSize: 0, dateFormat: '%m-%d'};
+      // var	parseDate = d3.time.format("%Y-%m").parse;
+      // var parseTime = d3.timeParse("%d-%b-%y");
+      
+      // var container = d3.selectAll("#bars")
+      // .append("svg")
+      // .attr("width", 500)
+      // .attr("height", 400)
+                    
+      
+      // var svg = d3.select("svg"),
+      // margin= {
+      //   top: 30,
+      //    right: 20, 
+      //    bottom: 30, 
+      //    left: 50},
+      // width = container.attr("width") - margin.left - margin.right,
+      // height = container.attr("height") -  margin.top - margin.bottom,
+      // g = container.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      // var parseTime = d3.timeParse("%Y-%m");
+      //   var x = d3.scaleBand().rangeRound([0, width], .5).padding(.1);
+      
+      // var y=  d3.scaleLinear().rangeRound([height, 0]);
         d3.json("/imports/bars/"+bardate+"/3915").then(function(data) {
-
-
-          x.domain(data.map(function(d) { return parseTime(d.Period)}));
-          y.domain([0, d3.max(data, function(d){return d.MoValue})])
-    
-                  
-          g.append("g")
-          .attr("transform", "translate(0," + height + ")")
-          .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b")))
       
-          g.append("g")
-          .call(d3.axisLeft(y)
-              .ticks(20)
-              .tickFormat(d3.formatPrefix(".1", 1e6)))
-          .append("text")
-          .attr("fill", "#000")
-          .attr("transform", "rotate(-90)")
-           .attr("x", -5)
-          .attr("y", -15)
-          .attr("dy", "0.71em")
-          .attr("text-anchor", "end")
-          .text("Monthly Trade Value");
-      
-          g.selectAll(".bar")
-          .data(data)
-          .enter().append("rect")
-          .attr("class", "bar")
-          .attr("x", function (d) {
-              return x(parseTime(d.Period));
-          })
-          .attr("y", function (d) {
-              return y(Number(d.MoValue));
-          })
-          .attr("width", x.bandwidth())
-          .attr("height", function (d) {
-              return  height-y(Number(d.MoValue));
-          });
-         
+            return data   
       })
-   
-} 
- 
+      return data
+      } 
 
 
 }
@@ -202,8 +192,9 @@ function buildPie(piedate, inout, renderloc){
   // svg.call(tip);
   // import data 
   d3.json(inout+"/pie/"+piedate).then(function(data) {
-    //  console.log(data)
-      // parse data
+      d3.selectAll("input")
+        .on("change", update)
+
       data.forEach(function(d){
           d.total = d.total;
           d.HSC = d.HSC;
@@ -211,10 +202,9 @@ function buildPie(piedate, inout, renderloc){
           d.data 
         //  console.log(d.total)
       });
-     
-   
- 
-    // "g element is a container used to group other SVG elements"
+     function update(piedate = this.value){
+        console.log(piedate)}
+//Pie Slices
     var g = svg.selectAll(".arc")
         .data(pie(data))
       .enter().append("g")
@@ -222,15 +212,15 @@ function buildPie(piedate, inout, renderloc){
         .on("mouseover", function(d){tooltip.transition()
                                             .duration(200)
                                             .style("opacity", 9);
-                                            tooltip.html("Products:<strong> "+d.data.Description+"</strong></BR>Value:<strong> $"+(d.data.total/1e9).toLocaleString('en', {useGrouping:true})+"Billion USD</strong>")
+                                            tooltip.html("Products:<strong> "+d.data.Description+"</strong></BR>Value:<strong> $"+(d.data.total/1e9).toLocaleString('en', {useGrouping:true})+" Billion USD</strong>")
                                               .style("left", (d3.event.pageX)+ "px")
                                               .style("top", (d3.event.pageY - 100) + "px")})
 	                                            .on("mouseout", function(d) {
                                             tooltip.transition()
                                                 .duration(500)
                                                 .style("opacity", 0);
-                                          });
-  
+                                          })
+        
     // append path 
     g.append("path")
         .attr("d", arc)
@@ -248,8 +238,8 @@ function buildPie(piedate, inout, renderloc){
         .duration(2000)
       .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
         .attr("dy", ".35em")
-        .text(function(d) { return d.data.HSC; });
-      
+        .text(function(d) { return d.data.HSC; })
+        // .on("click",  console.log("happy"))
   
       
   });
@@ -399,16 +389,18 @@ function malikBuild() {
   update(bothData);
   }
 
-function optionChanged(newdate) {
-  console.log(newdate)
+// function optionChanged(newdate) {
+      
 
-  // //   // Fetch new data each time a new sample is selected
-  buildPie(newdate, "imports", "#import-pie")
-  buildPie(newdate, "exports", "#export-pie")
-  buildBar("2018", "3915", "#bars")
-  console.log(newdate)
+//   console.log(newdate)
 
-  }
+//   // //   // Fetch new data each time a new sample is selected
+//   buildPie(newdate, "imports", "#import-pie")
+//   buildPie(newdate, "exports", "#export-pie")
+//   updateBar("2018", "3915", "#bars")
+//   console.log(newdate)
+
+//   }
 
 function init(){
   buildPie("2018", "imports", "#import-pie")

@@ -39,7 +39,7 @@ body {
 	}
 
 	.bar:hover {
-	  fill: brown;
+	  fill: red;
   } 
   
   ::-webkit-scrollbar {
