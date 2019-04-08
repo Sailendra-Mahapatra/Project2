@@ -189,6 +189,26 @@ def Exptotal():
 
     return jsonify(totals)
 
+@app.route("/imports/main/bars")
+def bars():
+    stmt = db.session.query(barImports).statement
+    df = pd.read_sql_query(stmt, db.session.bind)
+    # df = df[df["Period"].str.contains(f"{year}")]
+    data = df.groupby(["Period"])["MoValue"].sum()
+    data = pd.DataFrame({"total" : data,"type":"import"})
+    data = data.reset_index()
+    data = data.to_dict("records")
+
+    stmt2 = db.session.query(Exports).statement
+    df2 = pd.read_sql_query(stmt2, db.session.bind)
+    data2 = df2.groupby(["Period"])["MoValue"].sum()
+    data2 = pd.DataFrame({"total" : data2,"type": "export"})
+    data2 = data2.reset_index()
+    data2 = data2.to_dict("records")
+    bothData = (data+data2)
+
+    return jsonify(bothData)
+
 if __name__ == "__main__":
     app.run()
 

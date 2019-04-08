@@ -14,7 +14,8 @@ d3.json("/imports/bars",function(data) {
             totalExp.push(d)
         }
         
-    });
+	});
+	console.log(data)
 })
     console.log(totalExp);
     
