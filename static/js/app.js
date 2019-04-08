@@ -1,5 +1,5 @@
 
-function buildBar(bardate, hsc, renderloc) {//renderloc
+function buildBar(bardate, hsc, renderloc, optionChanged) {//renderloc
 
   var svgWidth = 900
   var svgHeight = 500
@@ -27,7 +27,7 @@ height = container.attr("height") -  margin.top - margin.bottom,
 g = container.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 var parseTime = d3.timeParse("%Y-%m");
 
- var x = d3.scaleBand().rangeRound([0, width], .5).padding(.1);
+var x = d3.scaleBand().rangeRound([0, width], .5).padding(.1);
 
 var y=  d3.scaleLinear().rangeRound([height, 0]);
 // var x = d3.scaleBand()
@@ -97,29 +97,57 @@ d3.json("/imports/bars/"+bardate+"/"+hsc).then(function(data) {
  
         
       })  
-      function optionChanged(renderloc){
-        d3.json("/imports/bars/"+bardate+"/"+hsc).then(function(data) {
+      function optionChanged(bardate){
+        var x = d3.scaleBand().rangeRound([0, width], .5).padding(.1);
+
+      var y=  d3.scaleLinear().rangeRound([height, 0]);
+        d3.json("/imports/bars/"+bardate+"/3915").then(function(data) {
 
 
-        x.domain(data.map(function(d) { return parseTime(d.Period)}));
-        y.domain([0, d3.max(data, function(d){return d.MoValue})])
-        var svg = d3.selectAll(renderloc)
-          .append("svg")
-          .attr("width", 500)
-         .attr("height", 400)
-
-        svg.select(".line")   // change the line
-         .duration(750)
-         .attr("d", valueline(data));
-     svg.select(".x.axis") // change the x axis
-         .duration(750)
-         .call(x);
-     svg.select(".y.axis") // change the y axis
-         .duration(750)
-         .call(y);      
+          x.domain(data.map(function(d) { return parseTime(d.Period)}));
+          y.domain([0, d3.max(data, function(d){return d.MoValue})])
+    
+                  
+          g.append("g")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b")))
+      
+          g.append("g")
+          .call(d3.axisLeft(y)
+              .ticks(20)
+              .tickFormat(d3.formatPrefix(".1", 1e6)))
+          .append("text")
+          .attr("fill", "#000")
+          .attr("transform", "rotate(-90)")
+           .attr("x", -5)
+          .attr("y", -15)
+          .attr("dy", "0.71em")
+          .attr("text-anchor", "end")
+          .text("Monthly Trade Value");
+      
+          g.selectAll(".bar")
+          .data(data)
+          .enter().append("rect")
+          .attr("class", "bar")
+          .attr("x", function (d) {
+              return x(parseTime(d.Period));
+          })
+          .attr("y", function (d) {
+              return y(Number(d.MoValue));
+          })
+          .attr("width", x.bandwidth())
+          .attr("height", function (d) {
+              return  height-y(Number(d.MoValue));
+          });
+         
       })
+   
 } 
+ 
+
+
 }
+
 function buildSelector(date) {
   d3.json("/imports/bars/"+date).then(function(response){
     selection= d3.select("#filter")
@@ -206,19 +234,7 @@ function buildPie(piedate, inout, renderloc){
   
       
   });
-  function optionChanged(newdate){
-    d3.json(inout+"/pie/"+piedate).then(function(data) {
-      //  console.log(data)
-        // parse data
-        data.forEach(function(d){
-            d.total = +d.total;
-            d.HSC = d.HSC;
-            d.Description = d.Description
-            d.data 
-          //  console.log(d.total)
-        });
-      })
-  }
+
   // Helper function for animation of pie chart and donut chart
   function tweenPie(b) {
     b.innerRadius = 0;
@@ -228,7 +244,99 @@ function buildPie(piedate, inout, renderloc){
   
   
   };
-
+  function buildS(){
+    var svgWidth = 960;
+    var svgHeight = 660;
+   
+   // // Define the chart's margins as an object
+    var chartMargin = {
+      top: 30,
+      right: 30,
+      bottom: 30,
+      left: 30
+    };
+   
+   // // Define dimensions of the chart area
+    var chartWidth = svgWidth - chartMargin.left - chartMargin.right;
+    var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
+   
+   // // Select body, append SVG area to it, and set the dimensions
+    var svg = d3.select("#bars")
+      .append("svg")
+      .attr("height", svgHeight)
+      .attr("width", svgWidth);
+   
+   // // Append a group to the SVG area and shift ('translate') it to the right and to the bottom
+    var chartGroup = svg.append("g")
+      .attr("transform", `translate(${chartMargin.left}, ${chartMargin.top})`);
+   
+   // var url1 = "/imports/tooltip";  
+   
+   // Load data from url
+   d3.json("/imports/bars/2015").then(function(data) {
+   //d3.json("/imports/bars/2015-12").then(function(data) {
+     console.log(data);
+   
+     var keys = data.columns.slice(1)
+   
+   //   // Cast the hours value to a number for each piece of data
+      data.forEach(function(d) {
+   //.Year = +d.Year;
+   //   });
+   
+   //   // Configure a band scale for the horizontal axis with a padding of 0.1 (10%)
+      var xBandScale = d3.scaleBand()
+        .domain(data.map(d => d.YTDValue))
+        .range([0, chartWidth])
+        .padding(0.1);
+   
+   //   // Create a linear scale for the vertical axis.
+      var yLinearScale = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d.Period)])
+        .range([chartHeight, 0]);
+   
+   //   // Create two new functions passing our scales in as arguments
+   //   // These will be used to create the chart's axes
+      var bottomAxis = d3.axisBottom(xBandScale);
+      var leftAxis = d3.axisLeft(yLinearScale).ticks(10);
+   
+   //   // Append two SVG group elements to the chartGroup area,
+   //   // and create the bottom and left axes inside of them
+      chartGroup.append("g")
+        .call(leftAxis);
+   
+      chartGroup.append("g")
+        .attr("transform", `translate(0, ${chartHeight})`)
+        .call(bottomAxis);
+   
+       var color = d3.scaleOrdinal()
+        .domain(keys)
+        .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf'])
+        
+       var stackedData = d3.stack()
+        .keys(keys)
+        (data)
+   //   // Create one SVG rectangle per piece of data
+   //   // Use the linear and band scales to position each rectangle within the chart
+      chartGroup.selectAll(".bar")
+         .data(stackedData)
+         .enter()
+         .append("path")
+         .style("fill", function(d) { console.log(d.key) ; return color(d.key); })
+         .attr("d", d3.area())
+         .x(function(d, i) { return x(d.data.Period); })
+         .y0(function(d) { return y(d[0]); })
+         .y1(function(d) { return y(d[1]); });
+   //      .append("rect")
+   //      .attr("class", "bar")
+   //      .attr("x", d => xBandScale(d.YTDValue))
+   //      .attr("y", d => yLinearScale(d.Period))
+   //      .attr("width", xBandScale.bandwidth())
+   //      .attr("height", d => chartHeight - yLinearScale(d.Period));
+   
+   });
+   });
+   }
  // BAR OF TOTAL IMPORTS AND EXPORTS
 function malikBuild() {
   var totalImp = [];
@@ -379,7 +487,7 @@ function init(){
   buildPie("2018", "imports", "#import-pie")
   buildPie("2018", "exports", "#export-pie")
   buildBar("2018", "3915", "#bars")
-
+  buildS()
 }
 
 init()
