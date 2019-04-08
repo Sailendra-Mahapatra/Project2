@@ -2,10 +2,12 @@ body {
 	background-color: #778899	
 }
 .arc text {
-    font: 8px sans-serif;
+    font: 15px sans-serif;
     text-anchor: middle;
   }
-  
+.arc:hover{
+	  fill: brown;
+  } 
   .arc path {
     stroke: #fff;
   }
@@ -14,7 +16,7 @@ body {
   }
   
   .arc2 text {
-    font: 10px sans-serif;
+    font: 15px sans-serif;
     text-anchor: middle;
   } 
   
@@ -108,4 +110,4 @@ body {
       border-radius: 8px;			
       pointer-events: none;			
   }
-  
+	

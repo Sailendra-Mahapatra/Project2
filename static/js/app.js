@@ -222,7 +222,7 @@ function buildPie(piedate, inout, renderloc){
         .on("mouseover", function(d){tooltip.transition()
                                             .duration(200)
                                             .style("opacity", 9);
-                                            tooltip.html("Products:<strong> "+d.data.Description+"</strong></BR>Value:<strong> "+d.data.total.toLocaleString('en', {useGrouping:true})+"</strong>")
+                                            tooltip.html("Products:<strong> "+d.data.Description+"</strong></BR>Value:<strong> $"+(d.data.total/1e9).toLocaleString('en', {useGrouping:true})+"Billion USD</strong>")
                                               .style("left", (d3.event.pageX)+ "px")
                                               .style("top", (d3.event.pageY - 100) + "px")})
 	                                            .on("mouseout", function(d) {
@@ -399,16 +399,16 @@ function malikBuild() {
   update(bothData);
   }
 
-// function optionChanged(newdate) {
-//   console.log(newdate)
+function optionChanged(newdate) {
+  console.log(newdate)
 
-//   // //   // Fetch new data each time a new sample is selected
-//   buildPie(newdate, "imports", "#import-pie")
-//   buildPie(newdate, "exports", "#export-pie")
-//   buildBar("2018", "3915", "#bars")
-//   console.log(newdate)
+  // //   // Fetch new data each time a new sample is selected
+  buildPie(newdate, "imports", "#import-pie")
+  buildPie(newdate, "exports", "#export-pie")
+  buildBar("2018", "3915", "#bars")
+  console.log(newdate)
 
-//   }
+  }
 
 function init(){
   buildPie("2018", "imports", "#import-pie")
