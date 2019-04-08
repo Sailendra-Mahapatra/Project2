@@ -1,5 +1,5 @@
 
-function buildBar(bardate, hsc, renderloc, optionChanged(bardate)) {//renderloc
+function buildBar(bardate, hsc, renderloc) {//renderloc
 
   var svgWidth = 900
   var svgHeight = 500
@@ -389,18 +389,17 @@ function malikBuild() {
   update(bothData);
   }
 
-// function optionChanged(newdate) {
+function optionChanged(newdate) {
       
+  console.log(newdate)
 
-//   console.log(newdate)
+  // //   // Fetch new data each time a new sample is selected
+  buildPie(newdate, "imports", "#import-pie")
+  buildPie(newdate, "exports", "#export-pie")
+  updateBar(newdate, "3915", "#bars")
+  console.log(newdate)
 
-//   // //   // Fetch new data each time a new sample is selected
-//   buildPie(newdate, "imports", "#import-pie")
-//   buildPie(newdate, "exports", "#export-pie")
-//   updateBar("2018", "3915", "#bars")
-//   console.log(newdate)
-
-//   }
+  }
 
 function init(){
   buildPie("2018", "imports", "#import-pie")
