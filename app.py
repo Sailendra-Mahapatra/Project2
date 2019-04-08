@@ -158,7 +158,7 @@ def impbars(year, hsc):
     # df["MoValue"] = pd.to_numeric(df["MoValue"])
 
     df = df[df["Period"].str.contains(f"{year}")]
-    products = df.loc[df["HSC"] == hsc]
+    products = df.loc[df["HSC"] ==  hsc]
     products= products.to_dict("records")
 
     return jsonify(products)

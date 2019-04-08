@@ -1,5 +1,5 @@
 
-function buildBar(bardate, renderloc) {//renderloc
+function buildBar(bardate, hsc, renderloc) {//renderloc
 
   var svgWidth = 900
   var svgHeight = 500
@@ -36,7 +36,7 @@ var y=  d3.scaleLinear().rangeRound([height, 0]);
 //     .range([height, 0]);
               
 
-d3.json("/imports/bars/"+bardate).then(function(data) {
+d3.json("/imports/bars/"+bardate+"/"+hsc).then(function(data) {
   //  console.log(data)
       // parse data
       // data.forEach(function(d){
@@ -44,17 +44,20 @@ d3.json("/imports/bars/"+bardate).then(function(data) {
       //     d.month = d.Period
       // })
 
-      d3.select("#search")
-      .on("keyup", function (){
-        var search_data = data,
-          text= this.value.trim();
-        var searchResults = search_data.map(function(r) {
-          var regex = new RegExp("^"+ text+ ".*");
-          if (regex.test(r.Description)) {
-            return regex.exec(r.Description)[0]
-          }
+      // d3.select("#search")
+      // .on("keyup", function (event){
+      //   if (event.keyCode === 13){}
+      //   var search_data = data,
+      //     text= this.value.trim();
+
+      //   var searchResults = search_data.map(function(r) {
+      //     var regex = new RegExp("^"+ text+ ".*");
+      //     if (regex.test(r.Description)) {
+      //       return regex.exec(r.Description)[0]
+      //     }
+      //   })
       console.log(data)
-      searchedData = data.filter(d => d.Description == searchResults)
+      // searchedData = data.filter(d => d.Description == searchResults)
       x.domain(data.map(function(d) { return parseTime(d.Period)}));
       y.domain([0, d3.max(data, function(d){return d.MoValue})])
 
@@ -92,13 +95,33 @@ d3.json("/imports/bars/"+bardate).then(function(data) {
       });
 
  
-        })
+        
       })  
-  });
-}
+      function optionChanged(renderloc){
+        d3.json("/imports/bars/"+bardate+"/"+hsc).then(function(data) {
 
+
+        x.domain(data.map(function(d) { return parseTime(d.Period)}));
+        y.domain([0, d3.max(data, function(d){return d.MoValue})])
+        var svg = d3.selectAll(renderloc)
+          .append("svg")
+          .attr("width", 500)
+         .attr("height", 400)
+
+        svg.select(".line")   // change the line
+         .duration(750)
+         .attr("d", valueline(data));
+     svg.select(".x.axis") // change the x axis
+         .duration(750)
+         .call(x);
+     svg.select(".y.axis") // change the y axis
+         .duration(750)
+         .call(y);      
+      })
+} 
+}
 function buildSelector(date) {
-  d3.json("/imports/bars/"+ date).then(function(response){
+  d3.json("/imports/bars/"+date).then(function(response){
     selection= d3.select("#filter")
     selection.html("");
     var table = slection
@@ -111,9 +134,6 @@ function buildSelector(date) {
   });              
 })
 }
-
-
-
 
 function buildPie(piedate, inout, renderloc){
   // margin
@@ -186,7 +206,19 @@ function buildPie(piedate, inout, renderloc){
   
       
   });
-  
+  function optionChanged(newdate){
+    d3.json(inout+"/pie/"+piedate).then(function(data) {
+      //  console.log(data)
+        // parse data
+        data.forEach(function(d){
+            d.total = +d.total;
+            d.HSC = d.HSC;
+            d.Description = d.Description
+            d.data 
+          //  console.log(d.total)
+        });
+      })
+  }
   // Helper function for animation of pie chart and donut chart
   function tweenPie(b) {
     b.innerRadius = 0;
@@ -332,22 +364,21 @@ function malikBuild() {
   update(bothData);
   }
 
-function optionChanged(newdate) {
-  console.log(newdate)
+// function optionChanged(newdate) {
+//   console.log(newdate)
 
-  // //   // Fetch new data each time a new sample is selected
-  buildPie(newdate, "imports", "#import-pie")
-  buildPie(newdate, "exports", "#export-pie")
-  // buildBar(newdate)
-  console.log(newdate)
+//   // //   // Fetch new data each time a new sample is selected
+//   buildPie(newdate, "imports", "#import-pie")
+//   buildPie(newdate, "exports", "#export-pie")
+//   buildBar("2018", "3915", "#bars")
+//   console.log(newdate)
 
-  }
+//   }
 
 function init(){
   buildPie("2018", "imports", "#import-pie")
   buildPie("2018", "exports", "#export-pie")
-  // buildBar("2018")
-  malikBuild()
+  buildBar("2018", "3915", "#bars")
 
 }
 
