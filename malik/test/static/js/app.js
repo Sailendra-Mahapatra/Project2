@@ -1,132 +1,97 @@
+var svg = d3.select(".chart"),
+    margin = {top: 20, right: 20, bottom: 50, left: 50},
+    width1 = +svg.attr("width") - margin.left - margin.right,
+    height1 = +svg.attr("height") - margin.top - margin.bottom,
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var x0 = d3.scaleBand()
+    .rangeRound([0, width1])
+    .paddingInner(0.3);
+var x1 = d3.scaleBand()
+    .padding(0.05);
+var y = d3.scaleLinear()
+    .rangeRound([height1, 0]);
+var z = d3.scaleOrdinal()
+    .range(["#98abc5", "#8a89a6","#6b486b"]);
 
-var totalImp = [];
-var totalExp = [];
-var bothData = [];
+// // monthly chart
+// // var svg2 = d3.select(".month"),
+// // margin1 = {top: 20, right: 100, bottom: 50, left: 100},
+// // width = 960 - margin1.left - margin1.right,
+// // height = 500 - margin1.top - margin1.bottom,
+// // g1 = svg2.append("g").attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");
+// // var x2 = d3.scaleBand()
+// // .rangeRound([0, width])
+// // .paddingInner(0.3);
+// // var x3 = d3.scaleBand()
+// // .padding(0.05);
+// // var y1 = d3.scaleLinear()
+// // .rangeRound([height, 0]);
+// // var z1 = d3.scaleOrdinal()
+// // .range(["#4cb2cc", "#b8a3ff","red", "#808080"])
 
-d3.json("/imports/bars",function(data) {
+var url = "/imports/bars"
+d3.json(url, function(data) {
     data.forEach(d => {
-        bothData.push(d)
+        console.log(d);
         
-        if (d.type === "import") {
-            totalImp.push(d)
-        }
-        if(d.type === "export"){
-            totalExp.push(d)
-        }
-        
-    });
-})
-    console.log(totalExp);
-    
-// functions for toggling between data
-function change(value){
+    });  
+}),
+ function(error, data) {
+  if (error) throw error;
+  var keys = data.columns.slice(1);
 
-	if(value === 'import'){
-		update(totalImp);
-	}else if(value === 'export'){
-		update(totalExp);
-	}else{
-		update(bothData);
-	}
-}
-
-function update(data){
-	//set domain for the x axis
-	xChart.domain(["jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]);
-	//set domain for y axis
-    yChart.domain( [0, d3.max(data, function(d){ return +d.total; })] );
-    
-    //get the width of each bar 
-	var barWidth = width / data.length;
-	
-	//select all bars on the graph, take them out, and exit the previous data set. 
-	//then you can add/enter the new data set
-	var bars = svg.selectAll(".bar")
-					.remove()
-					.exit()
-					.data(data)		
-	//now actually give each rectangle the corresponding data
-	bars.enter()
-		.append("rect")
-		.attr("class", "bar")
-		.attr("x", function(d, i){ return i * barWidth + 1 })
-		.attr("y", function(d){ return yChart( d.total); })
-		.attr("height", function(d){ return height - yChart(d.total); })
-		.attr("width", barWidth - 1)
-		.attr("fill", function(d){ 
-			if(d.type === "import"){
-				return "rgb(251,180,174)";
-			}else{
-				return "rgb(179,205,227)";
-			}
-        });
-        //left axis
-	svg.select('.y')
-    .call(yAxis)
-//bottom axis
-svg.select('.xAxis')
-  .attr("transform", "translate(0," + height + ")")
-  .call(xAxis)
-  .selectAll("text")
-      .style("text-anchor", "end")
-      .attr("dx", "-.8em")
-      .attr("dy", ".15em")
-      .attr("transform", function(d){
-          return "rotate(-65)";
-      });
+  
+  x0.domain(data.map(function(d) { return d.year; }));
+  x1.domain(keys).rangeRound([0, x0.bandwidth()]);
+  y.domain([0, d3.max(data, function(d) { return d3.max(keys, function(key) { return d[key]; }); })]).nice();
+  g.append("g")
+    .selectAll("g")
+    .data(data)
+    .enter().append("g")
+      .attr("transform", function(d) { return "translate(" + x0(d.year) + ",0)"; })
+    .selectAll("rect")
+    .data(function(d) { return keys.map(function(key) { return {key: key, value: d[key]}; }); })
+    .enter().append("rect")
+    .transition().duration(3000)
+    .delay( function(d,i) { return i * 200; })
+      .attr("x", function(d) { return x1(d.key); })
+      .attr("y", function(d) { return y(d.value); })
+      .attr("width", x1.bandwidth())
+      .attr("height", function(d) { return height1 - y(d.value); })
+      .attr("fill", function(d) { return z(d.key); });
+  g.append("g")
+      .attr("class", "axis")
+      .attr("transform", "translate(0," + height1 + ")")
+      .call(d3.axisBottom(x0));
+  g.append("g")
+      .attr("class", "axis")
+      .call(d3.axisLeft(y).ticks(null, "s"))
+    .append("text")
+      .attr("x", 2)
+      .attr("y", y(y.ticks().pop()) + 0.5)
+      .attr("dy", "0.32em")
+      .attr("fill", "#000")
+      .attr("font-weight", "bold")
+      .attr("text-anchor", "start")
+      .text("US Trade in Dollars");
+  var legend = g.append("g")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 12)
+      .attr("text-anchor", "end")
+      .attr("font-weight", "bold")
+    .selectAll("g")
+    .data(keys.slice().reverse())
+    .enter().append("g")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+  legend.append("rect")
+      .attr("x", width1 - 10)
+      .attr("width", 19)
+      .attr("height", 19)
+      .attr("fill", z);
+  legend.append("text")
+      .attr("x", width1 - 18)
+      .attr("y", 9.5)
+      .attr("dy", "0.32em")
+      .text(function(d) { return d; });
       
-}//end update
-
-//set up svg
-var margin = {top: 20, right: 20, bottom: 95, left: 50};
-var width = 800;
-var height = 500;
-
-var svg = d3.select(".svg")
-				.attr("width", width + margin.left + margin.right)
-				.attr("height", height + margin.top + margin.bottom)
-				.append("g")
-				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-var xChart = d3.scaleBand()
-				.range([0, width]);
-				
-var yChart = d3.scaleLinear()
-				.range([height, 0]);
-
-var xAxis = d3.axisBottom(xChart);
-var yAxis = d3.axisLeft(yChart);
-
-//set up axes
-//left axis
-svg.append("g")
-.attr("class", "y axis")
-.call(yAxis)
-
-//bottom axis
-svg.append("g")
-.attr("class", "xAxis")
-.attr("transform", "translate(0," + height + ")")
-.call(xAxis)
-.selectAll("text")
-  .style("text-anchor", "end")
-  .attr("dx", "-.8em")
-  .attr("dy", ".15em")
-  .attr("transform", function(d){
-      return "rotate(-65)";
-  });
-
-//add labels
-svg
-.append("text")
-.attr("transform", "translate(-35," +  (height+margin.bottom)/2 + ") rotate(-90)")
-.text("% of total watch time");
-
-svg
-.append("text")
-.attr("transform", "translate(" + (width/2) + "," + (height + margin.bottom - 5) + ")")
-.text("age group");
-
-//use bothData to begin with
-update(bothData);
-
+};

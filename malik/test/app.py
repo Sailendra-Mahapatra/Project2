@@ -27,6 +27,7 @@ Imports = Base.classes.imports
 Exports = Base.classes.export
 barImports = Base.classes.imports
 IndImports = Base.classes.hs2import
+hs2exports = Base.classes.hs2export
 YRImports = Base.classes.yrhs2import
 YRExports = Base.classes.yrhs2export
 @app.route("/")
@@ -169,23 +170,52 @@ def index():
 
 @app.route("/imports/bars")
 def bars():
-    stmt = db.session.query(barImports).statement
+    stmt = db.session.query(IndImports).statement
     df = pd.read_sql_query(stmt, db.session.bind)
-    # df = df[df["Period"].str.contains(f"{year}")]
-    data = df.groupby(["Period"])["MoValue"].sum()
-    data = pd.DataFrame({"total" : data,"type":"import"})
-    data = data.reset_index()
-    data = data.to_dict("records")
 
-    stmt2 = db.session.query(Exports).statement
+    stmt2 = db.session.query(hs2exports).statement
     df2 = pd.read_sql_query(stmt2, db.session.bind)
-    data2 = df2.groupby(["Period"])["MoValue"].sum()
-    data2 = pd.DataFrame({"total" : data2,"type": "export"})
-    data2 = data2.reset_index()
-    data2 = data2.to_dict("records")
-    bothData = (data+data2)
+    
+    def yearly_data(trade,year):
+        data = trade[trade["Period"].str.contains(year)]
+        data = data.groupby(["Description", "HSC"])["YTDValue"].max()
+        data = pd.DataFrame({"total" : data})
+    #     data = data.nlargest(10,"total")
+        data = data.reset_index()
+    
+        return data
+    
+    data_2015_import = yearly_data(df,"2015")
+    data_2015_export = yearly_data(df2,"2015")
 
-    return jsonify(bothData)
+    data_2016_import = yearly_data(df,"2016")
+    data_2016_export = yearly_data(df2,"2016")
+
+    data_2017_import = yearly_data(df,"2017")
+    data_2017_export = yearly_data(df2,"2017")
+
+    data_2018_import = yearly_data(df,"2018")
+    data_2018_export = yearly_data(df2,"2018")
+
+    total_import_export =  pd.DataFrame({"year":["2015","2016","2017","2018"],
+                                     "import":[data_2015_import["total"].sum(),data_2016_import["total"].sum(),data_2017_import["total"].sum(),data_2018_import["total"].sum()],
+                                     "export":[data_2015_export["total"].sum(),data_2016_export["total"].sum(),data_2017_export["total"].sum(),data_2018_export["total"].sum()]
+                                     
+})
+
+    
+
+    total_import_export = total_import_export.to_dict("records")
+
+    # stmt2 = db.session.query(Exports).statement
+    # df2 = pd.read_sql_query(stmt2, db.session.bind)
+    # data2 = df2.groupby(["Period"])["MoValue"].sum()
+    # data2 = pd.DataFrame({"total" : data2,"type": "export"})
+    # data2 = data2.reset_index()
+    # data2 = data2.to_dict("records")
+    # bothData = (data+data2)
+
+    return jsonify(total_import_export)
 if __name__ == "__main__":
     app.run()
 
