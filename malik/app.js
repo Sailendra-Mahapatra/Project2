@@ -1,79 +1,4 @@
-// var svgWidth = 960;
-// var svgHeight = 660;
 
-// // Define the chart's margins as an object
-// var chartMargin = {
-//   top: 50,
-//   right: 50,
-//   bottom: 50,
-//   left: 50
-// };
-
-// // Define dimensions of the chart area
-// var chartWidth = svgWidth - chartMargin.left - chartMargin.right;
-// var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
-
-// // Select body, append SVG area to it, and set the dimensions
-// var svg = d3.select("body")
-//   .append("svg")
-//   .attr("height", svgHeight)
-//   .attr("width", svgWidth);
-
-// // Append a group to the SVG area and shift ('translate') it to the right and to the bottom
-// var chartGroup = svg.append("g")
-//   .attr("transform", `translate(${chartMargin.left}, ${chartMargin.top})`);
-
-// // Load data from hours-of-tv-watched.csv
-// d3.csv("total_import_export.csv", function(error, data) {
-//   if (error) throw error;
-
-//   console.log(data);
-
-//   data.forEach(function(d) {
-//     d.import = +d.import/100000000;
-//     d.import = +d.import/100000000;
-//     console.log(d.import);
-//   });
-
-
-//   // // Configure a band scale for the horizontal axis with a padding of 0.1 (10%)
-//   var xBandScale = d3.scaleBand()
-//     .domain(data.map(d => d.year))
-//     .range([0, chartWidth])
-//     .padding(0.1);
-
-//   // // Create a linear scale for the vertical axis.
-//   var yLinearScale = d3.scaleLinear()
-//     .domain([0, d3.max(data, d => d.import)])
-//     .range([chartHeight, 0]);
-
-//   // // Create two new functions passing our scales in as arguments
-//   // // These will be used to create the chart's axes
-//   var bottomAxis = d3.axisBottom(xBandScale);
-//   var leftAxis = d3.axisLeft(yLinearScale).ticks(10);
-
-//   // // Append two SVG group elements to the chartGroup area,
-//   // // and create the bottom and left axes inside of them
-//   chartGroup.append("g")
-//     .call(leftAxis);
-
-//   chartGroup.append("g")
-//     .attr("transform", `translate(0, ${chartHeight})`)
-//     .call(bottomAxis);
-
-//   // // Create one SVG rectangle per piece of tvData
-//   // // Use the linear and band scales to position each rectangle within the chart
-//   chartGroup.selectAll(".bar")
-//     .data(data)
-//     .enter()
-//     .append("rect")
-//     .attr("class", "bar")
-//     .attr("x", d => xBandScale(d.year))
-//     .attr("y", d => yLinearScale(d.import))
-//     .attr("width", xBandScale.bandwidth())
-//     .attr("height", d => chartHeight - yLinearScale(d.import));
-
-// });
 
 var svg = d3.select("svg"),
     margin = {top: 20, right: 20, bottom: 50, left: 50},
@@ -92,10 +17,10 @@ var z = d3.scaleOrdinal()
 
 // monthly chart
 var svg2 = d3.select(".month"),
-margin = {top: 20, right: 10, bottom: 50, left: 40},
-width = 1200 - margin.left - margin.right,
-height = 600 - margin.top - margin.bottom,
-g1 = svg2.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+margin1 = {top: 20, right: 100, bottom: 50, left: 100},
+width = 960 - margin1.left - margin1.right,
+height = 500 - margin1.top - margin1.bottom,
+g1 = svg2.append("g").attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");
 var x2 = d3.scaleBand()
 .rangeRound([0, width])
 .paddingInner(0.3);
@@ -148,19 +73,20 @@ d3.csv("total_import_export.csv", function(d, i, columns) {
       .text("US Trade in Dollars");
   var legend = g.append("g")
       .attr("font-family", "sans-serif")
-      .attr("font-size", 10)
+      .attr("font-size", 12)
       .attr("text-anchor", "end")
+      .attr("font-weight", "bold")
     .selectAll("g")
     .data(keys.slice().reverse())
     .enter().append("g")
       .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
   legend.append("rect")
-      .attr("x", width1 - 19)
+      .attr("x", width1 - 10)
       .attr("width", 19)
       .attr("height", 19)
       .attr("fill", z);
   legend.append("text")
-      .attr("x", width1 - 24)
+      .attr("x", width1 - 18)
       .attr("y", 9.5)
       .attr("dy", "0.32em")
       .text(function(d) { return d; });
@@ -208,19 +134,20 @@ d3.csv("monthly_import_export.csv", function(d, i, columns) {
       .text("US Trade in Dollars");
   var legend1 = g1.append("g")
       .attr("font-family", "sans-serif")
-      .attr("font-size", 10)
+      .attr("font-size", 12)
       .attr("text-anchor", "end")
+      .attr("font-weight", "bold")
     .selectAll("g")
     .data(keys1.slice().reverse())
     .enter().append("g")
       .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
   legend1.append("rect")
-      .attr("x", width - 19)
+      .attr("x", width + 55)
       .attr("width", 19)
       .attr("height", 19)
       .attr("fill", z1);
   legend1.append("text")
-      .attr("x", width - 24)
+      .attr("x", width +48)
       .attr("y", 9.5)
       .attr("dy", "0.32em")
       .text(function(d) { return d; });

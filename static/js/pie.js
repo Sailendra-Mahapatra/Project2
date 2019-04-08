@@ -89,11 +89,7 @@ function tweenPie(b) {
   return function(t) { return arc(i(t)); };
 }
 
-// function tweenDonut(b) {
-//   b.innerRadius = 0;
-//   var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
-//   return function(t) { return arc2(i(t)); };
-// }
+
 };
 
 

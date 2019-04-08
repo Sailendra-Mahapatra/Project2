@@ -2,10 +2,12 @@ body {
 	background-color: #778899	
 }
 .arc text {
-    font: 8px sans-serif;
+    font: 15px sans-serif;
     text-anchor: middle;
   }
-  
+.arc:hover{
+	  fill: brown;
+  } 
   .arc path {
     stroke: #fff;
   }
@@ -14,7 +16,7 @@ body {
   }
   
   .arc2 text {
-    font: 10px sans-serif;
+    font: 15px sans-serif;
     text-anchor: middle;
   } 
   
@@ -37,7 +39,7 @@ body {
 	}
 
 	.bar:hover {
-	  fill: brown;
+	  fill: red;
   } 
   
   ::-webkit-scrollbar {
@@ -62,7 +64,7 @@ body {
   .card-body{
     padding-left:5%;
     margin-top:1%;
-    margin-bottom: 5% 
+    margin-bottom: 5%; 
     background-color: grey
   }
 
@@ -93,3 +95,19 @@ body {
       padding-bottom: 10%;
 
     }
+
+    div.tooltip {	
+      position: absolute;			
+      text-align: center;	
+      		
+      width: 15%;					
+      height: 10%;					
+      padding: 2px;		
+      margin: 1px;		
+      font: 12px sans-serif;		
+      background: lightsteelblue;	
+      border: 0px;		
+      border-radius: 8px;			
+      pointer-events: none;			
+  }
+	
