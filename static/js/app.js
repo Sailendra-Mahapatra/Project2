@@ -181,7 +181,7 @@ function buildPie(piedate, inout, renderloc){
   var svg = d3.select(renderloc).append("svg")
       .attr("width", width)
       .attr("height", height)
-    .append("g")
+      .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
   
       var tooltip = d3.select("body")
@@ -392,7 +392,7 @@ function malikBuild() {
 function optionChanged(newdate) {
       
   console.log(newdate)
-
+        // CLEAR THE OLD GRAPHS!!!!
   // //   // Fetch new data each time a new sample is selected
   buildPie(newdate, "imports", "#import-pie")
   buildPie(newdate, "exports", "#export-pie")
