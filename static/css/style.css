@@ -1,6 +1,79 @@
 body {
 	background-color: #778899	
 }
+
+.card-header{
+  margin-bottom:2%;
+}
+
+.cards {
+  margin-left: 0%;
+  margin-right: 5%;
+  padding-left: 5%;
+  padding-right: 8%;
+  margin-top: 8%;
+  padding-bottom: 10%;
+
+}
+#bars{
+  background-color: gainsboro
+}
+.card-body{
+  padding-left:5%;
+  margin-top:1%;
+  margin-bottom: 5%; 
+  background-color: grey
+}
+
+::-webkit-scrollbar {
+  display: none;
+} 
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color:grey;
+  color: white;
+  text-align: center;
+}
+
+.charter {
+  margin-left: 5%;
+  margin-right: 5%;
+  padding-left: 5%;
+  padding-right:8%;
+  margin-top:  0%;
+  padding-bottom: 10%;
+}
+
+
+div.tooltip {	
+  position: absolute;			
+  text-align: center;	
+      
+  width: 15%;					
+  height: 10%;					
+  padding: 2px;		
+  margin: 1px;		
+  font: 12px sans-serif;		
+  background: lightsteelblue;	
+  border: 0px;		
+  border-radius: 8px;			
+  pointer-events: none;			
+}
+
+.cards {
+  margin-left: 5%;
+  margin-right: 5%;
+  padding-left: 2%;
+  padding-right:2%;
+  margin-top:  3%;
+  padding-bottom: 10%;
+}
+
+/* PIE CHART  */
 .arc text {
     font: 15px sans-serif;
     text-anchor: middle;
@@ -34,6 +107,8 @@ body {
     fill: none;
     pointer-events: all;
   }
+
+  /*BAR CHARTS */
   .bar {
 	  fill: steelblue;
 	}
@@ -42,72 +117,9 @@ body {
 	  fill: red;
   } 
   
-  ::-webkit-scrollbar {
-    display: none;
-  } 
 
-  .cards {
-    margin-left: 5%;
-    margin-right: 5%;
-    padding-left: 2%;
-    padding-right:2%;
-    margin-top:  3%;
-    padding-bottom: 10%;
-  }
 
-  .card-header{
-    margin-bottom:2%;
-  }
-  #bars{
-  	background-color: gainsboro
-  }
-  .card-body{
-    padding-left:5%;
-    margin-top:1%;
-    margin-bottom: 5%; 
-    background-color: grey
-  }
 
-  .footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background-color:grey;
-    color: white;
-    text-align: center;
-  }
 
-  .charter {
-  	margin-left: 5%;
-    margin-right: 5%;
-    padding-left: 5%;
-    padding-right:8%;
-    margin-top:  0%;
-    padding-bottom: 10%;
-  }
-    .cards {
-      margin-left: 0%;
-      margin-right: 5%;
-      padding-left: 5%;
-      padding-right: 8%;
-      margin-top: 8%;
-      padding-bottom: 10%;
 
-    }
-
-    div.tooltip {	
-      position: absolute;			
-      text-align: center;	
-      		
-      width: 15%;					
-      height: 10%;					
-      padding: 2px;		
-      margin: 1px;		
-      font: 12px sans-serif;		
-      background: lightsteelblue;	
-      border: 0px;		
-      border-radius: 8px;			
-      pointer-events: none;			
-  }
-	
+    
