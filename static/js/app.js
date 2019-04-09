@@ -390,13 +390,15 @@ function malikBuild() {
   }
 
 function optionChanged(newdate) {
-      
+  var svg = d3.selectAll("svg");
+svg.select("svg").remove()
+    
   console.log(newdate)
         // CLEAR THE OLD GRAPHS!!!!
   // //   // Fetch new data each time a new sample is selected
   buildPie(newdate, "imports", "#import-pie")
   buildPie(newdate, "exports", "#export-pie")
-  updateBar(newdate, "3915", "#bars")
+  buildBar(newdate, "3915", "#bars")
   console.log(newdate)
 
   }

@@ -92,7 +92,8 @@ def slices(hsc, year):
         hsc_ind_imports["Year"] = result[2]
         hsc_ind_imports["HSC"] = result[3] 
 
-    return jsonify(hsc_ind_imports)
+    return j
+    sonify(hsc_ind_imports)
 
 @app.route("/imports/pie/<year>")
 def pies(year):
