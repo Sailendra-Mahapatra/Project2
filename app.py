@@ -19,6 +19,7 @@ Imports = Base.classes.imports
 Exports = Base.classes.export
 barImports = Base.classes.imports
 IndImports = Base.classes.hs2import
+IndExports = Base.classes.hs2export
 YRImports = Base.classes.yrhs2import
 YRExports = Base.classes.yrhs2export
 TotalImports = Base.classes.import_totals
@@ -165,6 +166,18 @@ def impbars(year, hsc):
 
     return jsonify(products)
 
+@app.route("/exports/bars/<year>/<hsc>")
+def expbars(year, hsc):
+    stmt = db.session.query(Exports).statement
+    df = pd.read_sql_query(stmt, db.session.bind)
+    # df["MoValue"] = pd.to_numeric(df["MoValue"])
+
+    df = df[df["Period"].str.contains(f"{year}")]
+    products = df.loc[df["HSC"] ==  hsc]
+    products= products.to_dict("records")
+
+    return jsonify(products)    
+
 @app.route("/imports/bars/<year>")
 def bigImpbars(year):
     stmt = db.session.query(barImports).statement
@@ -211,7 +224,76 @@ def bars():
 
     return jsonify(bothData)
 
+@app.route("/imports/grouped/<hsc>")
+def impgroups(hsc):
+    stmt = db.session.query(Imports).statement
+    df = pd.read_sql_query(stmt, db.session.bind)
+    
+    products = df.loc[df["HSC"] ==  hsc]
+    
+    def yearly_data(year):#will add hsc variable
+        data = products[products["Period"].str.contains(year)]
+        data = data.groupby(["Period"])["MoValue"].max()
+        data = data.reset_index()
+        return data
 
+    data_2015_import = yearly_data("2015")
+    data_2016_import = yearly_data("2016")
+    data_2017_import = yearly_data("2017")
+    data_2018_import = yearly_data("2018")
+
+    list_2015 = data_2015_import.to_dict()
+    list_2016 = data_2016_import.to_dict()
+    list_2017 =data_2017_import.to_dict()
+    list_2018 =data_2018_import.to_dict()
+
+
+    dicimport =[{"2015" : list_2015,"2016" : list_2016, "2017": list_2017, "2018":list_2018}]
+
+    # def yearly_data(year):#will add hsc variable
+    #     data = products[products["Period"].str.contains(year)]
+    #     data = data.groupby(["Period"])["MoValue"].max()
+    #     data = pd.DataFrame({"total" : data})
+    #     data = data.reset_index()
+    #     return data
+    
+    # data_2015_import = yearly_data("2015")
+    # data_2016_import = yearly_data("2016")
+    # data_2017_import = yearly_data("2017")
+    # data_2018_import = yearly_data("2018")
+
+    # monthly_import = pd.DataFrame({"month":["jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+    #                                  "2015 Import":data_2015_import["total"],
+    #                                  "2016 Import":data_2016_import["total"],
+    #                                  "2017 Import":data_2017_import["total"],
+    #                                  "2018 Import":data_2018_import["total"]
+    #                                   })
+    # monthly_import = monthly_import.to_dict()
+
+    # stmt2 = db.session.query(Exports).statement
+    # df2 = pd.read_sql_query(stmt2, db.session.bind)
+    # data2 = df2.groupby(["Period"])["MoValue"].sum()
+    # data2 = pd.DataFrame({"total" : data2,"type": "export"})
+    # data2 = data2.reset_index()
+    # data2 = data2.to_dict("records")
+    # bothData = (data+data2)
+
+    return jsonify(dicimport)
+
+
+
+@app.route("/exports/grouped/<hsc>")
+def expgroups(hsc):
+    stmt = db.session.query(IndExports).statement
+    df = pd.read_sql_query(stmt2, db.session.bind)
+    
+
+    data_2015_export = yearly_data(df2,"2015")
+    data_2016_export = yearly_data(df2,"2016")
+    data_2017_export = yearly_data(df2,"2017")
+    data_2018_export = yearly_data(df2,"2018")
+    total_import_export =  pd.DataFrame({"year":["2015","2016","2017","2018"],
+                                     "export":[data_2015_export["total"].sum(),data_2016_export["total"].sum(),data_2017_export["total"].sum(),data_2018_export["total"].sum()]})
 if __name__ == "__main__":
     app.run()
 

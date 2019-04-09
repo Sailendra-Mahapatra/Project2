@@ -1,5 +1,26 @@
 var parseTime = d3.timeParse("%Y-%m");
+function clicker(d){
+  var svg = d3.select("#bars");
+  svg.selectAll("svg").remove()
+  buildBar("2018", d.data.HSC, "#bars")
 
+console.log(d)     
+}
+
+function buildSelector(date) {
+d3.json("/imports/bars/"+date).then(function(response){
+  selection= d3.select("#filter")
+  selection.html("");
+  var table = slection
+                .append("table")
+                .append("tbody")
+Object.entries(respose).forEach(([key, value]) => {
+    var row = table.append("tr")
+    row.append("td").text(key, ": ")
+    row.append("td").text(value)
+});              
+})
+}
 function buildBar(bardate, hsc, renderloc) {//renderloc
 
   var svgWidth = 900
@@ -13,8 +34,8 @@ function buildBar(bardate, hsc, renderloc) {//renderloc
 
 var container = d3.selectAll(renderloc)
 .append("svg")
-.attr("width", 500)
-.attr("height", 400)
+.attr("width", 800)
+.attr("height", 600)
               
 
 var svg = d3.select("svg"),
@@ -37,30 +58,15 @@ var y=  d3.scaleLinear().rangeRound([height, 0]);
               
 
 d3.json("/imports/bars/"+bardate+"/"+hsc).then(function(data) {
-  //  console.log(data)
-      // parse data
-      // data.forEach(function(d){
-      //     d.total = +d.total;
-      //     d.month = d.Period
-      // })
+  console.log(data)
 
-      // d3.select("#search")
-      // .on("keyup", function (event){
-      //   if (event.keyCode === 13){}
-      //   var search_data = data,
-      //     text= this.value.trim();
-
-      //   var searchResults = search_data.map(function(r) {
-      //     var regex = new RegExp("^"+ text+ ".*");
-      //     if (regex.test(r.Description)) {
-      //       return regex.exec(r.Description)[0]
-      //     }
-      //   })
-      console.log(data)
-      // searchedData = data.filter(d => d.Description == searchResults)
+  if (data != null){
+    d3.json("/exports/bars/"+bardate+"/"+hsc).then(function(data){
+console.log(data)
+  
       x.domain(data.map(function(d) { return parseTime(d.Period)}));
       y.domain([0, d3.max(data, function(d){return d.MoValue})])
-
+console.log(d3.max(data, function(d){return d.MoValue}))
               
       g.append("g")
       .attr("transform", "translate(0," + height + ")")
@@ -73,8 +79,8 @@ d3.json("/imports/bars/"+bardate+"/"+hsc).then(function(data) {
       .append("text")
       .attr("fill", "#000")
       .attr("transform", "rotate(-90)")
-       .attr("x", -5)
-      .attr("y", -15)
+       .attr("x", -100)
+      .attr("y", -50)
       .attr("dy", "0.71em")
       .attr("text-anchor", "end")
       .text("Monthly Trade Value");
@@ -95,7 +101,8 @@ d3.json("/imports/bars/"+bardate+"/"+hsc).then(function(data) {
       });
 
  
-        
+    })  
+  }
       })  
 
       
@@ -135,11 +142,172 @@ d3.json("/imports/bars/"+bardate+"/"+hsc).then(function(data) {
       })
       return data
       } 
-
-
+    
 }
 
-function buildGrouped(bardate, hsc, renderloc) {//renderloc
+function buildGrouped() {// bardate, hsc, renderloc
+//   var container = d3.selectAll("#timeseries")
+//   .append("svg")
+//   .attr("width", 500)
+//   .attr("height", 400)
+//   var svg = d3.select("svg"),
+//   margin = {top: 20, right: 20, bottom: 50, left: 50},
+//   width1 = container.attr("width") - margin.left - margin.right,
+//   height1 = container.attr("height") - margin.top - margin.bottom,
+//   g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+// var x0 = d3.scaleBand()
+//   .rangeRound([0, width1])
+//   .paddingInner(0.3);
+// var x1 = d3.scaleBand()
+//   .padding(0.05);
+// var y = d3.scaleLinear()
+//   .rangeRound([height1, 0]);
+
+// monthly chart
+// var svg2 = d3.select(".month"),
+// margin1 = {top: 20, right: 100, bottom: 50, left: 100},
+// width = 960 - margin1.left - margin1.right,
+// height = 500 - margin1.top - margin1.bottom,
+// g1 = svg2.append("g").attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");
+// var x0 = d3.scaleBand()
+// .rangeRound([0, width])
+// .paddingInner(0.3);
+// var x1 = d3.scaleBand()
+// .padding(0.05);
+// var y = d3.scaleLinear()
+// .rangeRound([height, 0]);
+// var z = d3.scaleOrdinal()
+// .range(["#4cb2cc", "#b8a3ff","red", "#808080"])
+
+// var y=  d3.scaleLinear().rangeRound([height, 0]);
+// var x = d3.scaleBand()
+//     .range([0, width]);
+// var y = d3.scaleLinear()
+//     .range([height, 0]);
+
+// d3.json("imports/grouped/8528").then(function(data) {
+//   var categories = function(d){return +d.MoValue}
+//   console.log(data)
+//   console.log(categories)
+
+// x0.domain(data.map(function(d) { return d.year; }));
+// x1.domain(keys).rangeRound([0, x0.bandwidth()]);
+// y.domain([0, d3.max(data, function(d) { return d3.max(keys, function(key) { return d[key]; }); })]).nice();
+// g.append("g")
+//   .selectAll("g")
+//   .data(data)
+//   .enter().append("g")
+//     .attr("transform", function(d) { return "translate(" + x0(d.year) + ",0)"; })
+//   .selectAll("rect")
+//   .data(function(d) { return keys.map(function(key) { return {key: key, value: d[key]}; }); })
+//   .enter().append("rect")
+//   .transition().duration(3000)
+//   .delay( function(d,i) { return i * 200; })
+//     .attr("x", function(d) { return x1(d.key); })
+//     .attr("y", function(d) { return y(d.value); })
+//     .attr("width", x1.bandwidth())
+//     .attr("height", function(d) { return height1 - y(d.value); })
+//     .attr("fill", function(d) { return z(d.key); });
+// g.append("g")
+//     .attr("class", "axis")
+//     .attr("transform", "translate(0," + height1 + ")")
+//     .call(d3.axisBottom(x0));
+// g.append("g")
+//     .attr("class", "axis")
+//     .call(d3.axisLeft(y).ticks(null, "s"))
+//   .append("text")
+//     .attr("x", 2)
+//     .attr("y", y(y.ticks().pop()) + 0.5)
+//     .attr("dy", "0.32em")
+//     .attr("fill", "#000")
+//     .attr("font-weight", "bold")
+//     .attr("text-anchor", "start")
+//     .text("US Trade in Dollars");
+// var legend = g.append("g")
+//     .attr("font-family", "sans-serif")
+//     .attr("font-size", 12)
+//     .attr("text-anchor", "end")
+//     .attr("font-weight", "bold")
+//   .selectAll("g")
+//   .data(keys.slice().reverse())
+//   .enter().append("g")
+//     .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+// legend.append("rect")
+//     .attr("x", width1 - 10)
+//     .attr("width", 19)
+//     .attr("height", 19)
+//     .attr("fill", z);
+// legend.append("text")
+//     .attr("x", width1 - 18)
+//     .attr("y", 9.5)
+//     .attr("dy", "0.32em")
+//     .text(function(d) { return d; });
+    
+// });
+
+// d3.csv("../data/monthly_import_export.csv", function(d, i, columns) {
+// for (var i = 1, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]];
+// return d;
+// }, function(error, Data) {
+// if (error) throw error;
+// var keys1 = Data.columns.slice(1);
+// x2.domain(Data.map(function(d) { return d.month; }));
+// x3.domain(keys1).rangeRound([0, x2.bandwidth()]);
+// y1.domain([0, d3.max(Data, function(d) { return d3.max(keys1, function(key) { return d[key]; }); })]).nice();
+// g1.append("g")
+//   .selectAll("g")
+//   .data(Data)
+//   .enter().append("g")
+//     .attr("transform", function(d) { return "translate(" + x2(d.month) + ",0)"; })
+//   .selectAll("rect")
+//   .data(function(d) { return keys1.map(function(key) { return {key: key, value: d[key]}; }); })
+//   .enter().append("rect")
+//   .transition().duration(3000)
+//   .delay( function(d,i) { return i * 200; })
+//     .attr("x", function(d) { return x3(d.key); })
+//     .attr("y", function(d) { return y1(d.value); })
+//     .attr("width", x3.bandwidth())
+//     .attr("height", function(d) { return height - y1(d.value); })
+//     .attr("fill", function(d) { return z1(d.key); });
+// g1.append("g")
+//     .attr("class", "axis")
+//     .attr("transform", "translate(0," + height + ")")
+//     .call(d3.axisBottom(x2));
+// g1.append("g")
+//     .attr("class", "axis")
+//     .call(d3.axisLeft(y1).ticks(null, "s"))
+//   .append("text")
+//     .attr("x", 2)
+//     .attr("y", y1(y1.ticks().pop()) + 0.5)
+//     .attr("dy", "0.32em")
+//     .attr("fill", "#000")
+//     .attr("font-weight", "bold")
+//     .attr("text-anchor", "start")
+//     .text("US Trade in Dollars");
+// var legend1 = g1.append("g")
+//     .attr("font-family", "sans-serif")
+//     .attr("font-size", 12)
+//     .attr("text-anchor", "end")
+//     .attr("font-weight", "bold")
+//   .selectAll("g")
+//   .data(keys1.slice().reverse())
+//   .enter().append("g")
+//     .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+// legend1.append("rect")
+//     .attr("x", width + 55)
+//     .attr("width", 19)
+//     .attr("height", 19)
+//     .attr("fill", z1);
+// legend1.append("text")
+//     .attr("x", width +48)
+//     .attr("y", 9.5)
+//     .attr("dy", "0.32em")
+//     .text(function(d) { return d; });
+    
+// });
+  
+}      
+function optionChanged(bardate){
 
   var svgWidth = 900
   var svgHeight = 500
@@ -150,214 +318,38 @@ function buildGrouped(bardate, hsc, renderloc) {//renderloc
 // var	parseDate = d3.time.format("%Y-%m").parse;
 // var parseTime = d3.timeParse("%d-%b-%y");
 
-var container = d3.selectAll(renderloc)
-.append("svg")
-.attr("width", 500)
-.attr("height", 400)
+// var container = d3.selectAll("#bars")
+// .append("svg")
+// .attr("width", 500)
+// .attr("height", 400)
               
 
-var svg = d3.select("svg"),
-margin= {
-  top: 30,
-   right: 20, 
-   bottom: 30, 
-   left: 50},
-width = container.attr("width") - margin.left - margin.right,
-height = container.attr("height") -  margin.top - margin.bottom,
-g = container.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-var x = d3.scaleBand().rangeRound([0, width], .5).padding(.1);
-
-var y=  d3.scaleLinear().rangeRound([height, 0]);
-// var x = d3.scaleBand()
-//     .range([0, width]);
-// var y = d3.scaleLinear()
-//     .range([height, 0]);
-              
-
-d3.json("/imports/bars/"+bardate+"/"+hsc).then(function(data) {
-  //  console.log(data)
-      // parse data
-      // data.forEach(function(d){
-      //     d.total = +d.total;
-      //     d.month = d.Period
-      // })
-
-      // d3.select("#search")
-      // .on("keyup", function (event){
-      //   if (event.keyCode === 13){}
-      //   var search_data = data,
-      //     text= this.value.trim();
-
-      //   var searchResults = search_data.map(function(r) {
-      //     var regex = new RegExp("^"+ text+ ".*");
-      //     if (regex.test(r.Description)) {
-      //       return regex.exec(r.Description)[0]
-      //     }
-      //   })
-      console.log(data)
-      // searchedData = data.filter(d => d.Description == searchResults)
-      x.domain(data.map(function(d) { return parseTime(d.Period)}));
-      y.domain([0, d3.max(data, function(d){return d.MoValue})])
-
-              
-      g.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b")))
-  
-      g.append("g")
-      .call(d3.axisLeft(y)
-          .ticks(20)
-          .tickFormat(d3.formatPrefix(".1", 1e6)))
-      .append("text")
-      .attr("fill", "#000")
-      .attr("transform", "rotate(-90)")
-       .attr("x", -5)
-      .attr("y", -15)
-      .attr("dy", "0.71em")
-      .attr("text-anchor", "end")
-      .text("Monthly Trade Value");
-  
-      g.selectAll(".bar")
-      .data(data)
-      .enter().append("rect")
-      .attr("class", "bar")
-      .attr("x", function (d) {
-          return x(parseTime(d.Period));
-      })
-      .attr("y", function (d) {
-          return y(Number(d.MoValue));
-      })
-      .attr("width", x.bandwidth())
-      .attr("height", function (d) {
-          return  height-y(Number(d.MoValue));
-      });
-
- 
-        
-      })  
-
-      
-      function optionChanged(bardate){
-
-        var svgWidth = 900
-        var svgHeight = 500
-      
-      //Create SVG
-      
-      // axisTicks = {qty: 5, outerSize: 0, dateFormat: '%m-%d'};
-      // var	parseDate = d3.time.format("%Y-%m").parse;
-      // var parseTime = d3.timeParse("%d-%b-%y");
-      
-      // var container = d3.selectAll("#bars")
-      // .append("svg")
-      // .attr("width", 500)
-      // .attr("height", 400)
-                    
-      
-      // var svg = d3.select("svg"),
-      // margin= {
-      //   top: 30,
+// var svg = d3.select("svg"),
+// margin= {
+//   top: 30,
+//    right: 20, 
       //    right: 20, 
+//    right: 20, 
+//    bottom: 30, 
       //    bottom: 30, 
-      //    left: 50},
-      // width = container.attr("width") - margin.left - margin.right,
-      // height = container.attr("height") -  margin.top - margin.bottom,
-      // g = container.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      // var parseTime = d3.timeParse("%Y-%m");
-      //   var x = d3.scaleBand().rangeRound([0, width], .5).padding(.1);
-      
-      // var y=  d3.scaleLinear().rangeRound([height, 0]);
-        d3.json("/imports/bars/"+bardate+"/3915").then(function(data) {
-      
+//    bottom: 30, 
+//    left: 50},
+// width = container.attr("width") - margin.left - margin.right,
+// height = container.attr("height") -  margin.top - margin.bottom,
+// g = container.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+// var parseTime = d3.timeParse("%Y-%m");
+//   var x = d3.scaleBand().rangeRound([0, width], .5).padding(.1);
+
+// var y=  d3.scaleLinear().rangeRound([height, 0]);
+  d3.json("/imports/bars/"+bardate+"/3915").then(function(data) {
+
+      return data   
             return data   
-      })
-      return data
-      } 
-
-
-}
-function buildTimeseries(){
-var url1 =  "/exports/total"
-var url2 =  "/imports/total"
-TexportMoValue=[]
-TexportPeriod=[]
-TimportMoValue=[]
-TimportPeriod=[]
-
-d3.json(url1).then(function(data) {
-    data.forEach(d => {
-      
-      TexportMoValue.push(+d.MoValue),
-      TexportPeriod.push(d.Period)
-    })
-        });
-
-d3.json(url2).then(function(data) {
-    data.forEach(d => {
-    //   console.log(d.MoValue);
-      TimportMoValue.push(+d.MoValue),
-      TimportPeriod.push(d.Period)
-    }) 
-});  
-
-console.log(TimportMoValue);
-console.log(TimportPeriod);
-
-var bar1 = {
-  x: TexportPeriod,
-  y: TexportMoValue,
-  type: 'bar',
-  name: '$ Export',
-  // marker: {
-  //   color: 'rgb(0,0,255)',
-  //   opacity: 0.7,
-  // }
-};
-
-var bar2 = {
-  x: TimportPeriod,
-  y: TimportMoValue,
-  type: 'bar',
-  name: '$ Import',
-  // marker: {
-  //   color: 'rgb(255,0,0)',
-  //   opacity: 0.5
-  // }
-};
-console.log(TexportPeriod);
-console.log(TexportMoValue);
-var data = [bar1, bar2];
-console.log(data)
-var layout = {
-  title: 'US Export & Import',
-  "titlefont": {
-    "size": 15,
-  },
-  xaxis: {
-    tickangle: -45,
-    bargap: 0.001,
-  },
-  
-  barmode: 'stack'
-};
-
-Plotly.newPlot('timeseries', data, layout);
-}
-function buildSelector(date) {
-  d3.json("/imports/bars/"+date).then(function(response){
-    selection= d3.select("#filter")
-    selection.html("");
-    var table = slection
-                  .append("table")
-                  .append("tbody")
-  Object.entries(respose).forEach(([key, value]) => {
-      var row = table.append("tr")
-      row.append("td").text(key, ": ")
-      row.append("td").text(value)
-  });              
+      return data   
 })
-}
+return data
+} 
+
 
 function buildPie(piedate, inout, renderloc){
   // margin
@@ -459,31 +451,26 @@ function buildPie(piedate, inout, renderloc){
   
   
   };
-  function clicker(d){
-    var svg = d3.select("#bars");
-    svg.selectAll("svg").remove()
-    buildBar("2018", d.data.HSC, "#bars")
 
-  console.log(d)     
-  }
  // BAR OF TOTAL IMPORTS AND EXPORTS
 
 
   function make_treemap(){
-    d3.json("/imports/tree/2018").then(function(data) {
-      console.log(data)
+  //   d3.json("/imports/tree/2018").then(function(data) {
+  //     console.log(data)
      
-   var vizio = d3plus.viz()
-    .container(d3.select("#plots"))  // container DIV to hold the visualization
-    .data(data)  // data to use with the visualization
-    .type("tree_map")   // visualization type
-    .id(HSC)         // key for which our data is unique on    
-    .size(total)      // sizing of blocks
-    .draw()             // finally, draw the visualization!
+  //  var vizio = d3plus.viz()
+  //   .container(d3.select("#plots"))  // container DIV to hold the visualization
+  //   .data(data)  // data to use with the visualization
+  //   .type("tree_map")   // visualization type
+  //   .id(HSC)         // key for which our data is unique on    
+  //   .size(total)      // sizing of blocks
+  //   .draw()             // finally, draw the visualization!
    
-    })
+  //   })
 
   }
+
 function optionChanged(newdate) {
   var svg = d3.select("#bars");
   var exportPie = d3.select("#export-pie")
@@ -507,7 +494,8 @@ function init(){
   buildPie("2018", "imports", "#import-pie")
   buildPie("2018", "exports", "#export-pie")
   buildBar("2018", "3915", "#bars")
-  // buildTimeseries()
+  buildGrouped()
+
 }
 
 init()

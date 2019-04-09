@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
@@ -94,7 +94,6 @@ d3.json(url).then(function(data) {
 
 
 
-=======
 function groupBar(bardate) {//renderloc
 
     var svgWidth = 900
@@ -192,4 +191,3 @@ function groupBar(bardate) {//renderloc
         })  
     });
   }
->>>>>>> cb886b51cc3cc8423716bd721a095e35a164efe0

@@ -170,42 +170,32 @@ def index():
 
 @app.route("/imports/bars")
 def bars():
-    stmt = db.session.query(IndImports).statement
+    stmt = db.session.query(Imports).statement
     df = pd.read_sql_query(stmt, db.session.bind)
 
-    stmt2 = db.session.query(hs2exports).statement
-    df2 = pd.read_sql_query(stmt2, db.session.bind)
+    stmt = session.query(Imports).statement
+    df = pd.read_sql_query(stmt, session.bind)
+    products = df.loc[df["HSC"] ==  hsc]
     
-    def yearly_data(trade,year):
-        data = trade[trade["Period"].str.contains(year)]
-        data = data.groupby(["Description", "HSC"])["YTDValue"].max()
+    def yearly_data(year):#will add hsc variable
+        data = products[products["Period"].str.contains(year)]
+        data = data.groupby(["Period"])["MoValue"].max()
         data = pd.DataFrame({"total" : data})
-    #     data = data.nlargest(10,"total")
         data = data.reset_index()
+    return data
     
-        return data
-    
-    data_2015_import = yearly_data(df,"2015")
-    data_2015_export = yearly_data(df2,"2015")
+    data_2015_import = yearly_data("2015")
+    data_2016_import = yearly_data("2016")
+    data_2017_import = yearly_data("2017")
+    data_2018_import = yearly_data("2018")
 
-    data_2016_import = yearly_data(df,"2016")
-    data_2016_export = yearly_data(df2,"2016")
-
-    data_2017_import = yearly_data(df,"2017")
-    data_2017_export = yearly_data(df2,"2017")
-
-    data_2018_import = yearly_data(df,"2018")
-    data_2018_export = yearly_data(df2,"2018")
-
-    total_import_export =  pd.DataFrame({"year":["2015","2016","2017","2018"],
-                                     "import":[data_2015_import["total"].sum(),data_2016_import["total"].sum(),data_2017_import["total"].sum(),data_2018_import["total"].sum()],
-                                     "export":[data_2015_export["total"].sum(),data_2016_export["total"].sum(),data_2017_export["total"].sum(),data_2018_export["total"].sum()]
-                                     
-})
-
-    
-
-    total_import_export = total_import_export.to_dict("records")
+    monthly_import = pd.DataFrame({"month":["jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+                                     "2015 Import":data_2015_import["total"],
+                                     "2016 Import":data_2016_import["total"],
+                                     "2017 Import":data_2017_import["total"],
+                                     "2018 Import":data_2018_import["total"]
+                                      })
+    monthly_import = monthly_import.to_dict("records")
 
     # stmt2 = db.session.query(Exports).statement
     # df2 = pd.read_sql_query(stmt2, db.session.bind)
@@ -215,7 +205,7 @@ def bars():
     # data2 = data2.to_dict("records")
     # bothData = (data+data2)
 
-    return jsonify(total_import_export)
+    return jsonify(monthly_import)
 if __name__ == "__main__":
     app.run()
 
