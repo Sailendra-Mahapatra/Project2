@@ -393,6 +393,21 @@ function malikBuild() {
   update(bothData);
   }
 
+  function make_treemap(){
+    d3.json("/imports/tree/2018").then(function(data) {
+      console.log(data)
+     
+   var vizio = d3plus.viz()
+    .container(d3.select("#plots"))  // container DIV to hold the visualization
+    .data(data)  // data to use with the visualization
+    .type("tree_map")   // visualization type
+    .id(HSC)         // key for which our data is unique on    
+    .size(total)      // sizing of blocks
+    .draw()             // finally, draw the visualization!
+   
+    })
+
+  }
 function optionChanged(newdate) {
   var svg = d3.select("#bars");
   var exportPie = d3.select("#export-pie")
@@ -411,11 +426,12 @@ function optionChanged(newdate) {
 
   }
 
+  
 function init(){
   buildPie("2018", "imports", "#import-pie")
   buildPie("2018", "exports", "#export-pie")
   buildBar("2018", "3915", "#bars")
-
+  make_treemap()
 }
 
 init()
