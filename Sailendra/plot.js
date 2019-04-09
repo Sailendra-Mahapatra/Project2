@@ -1,42 +1,64 @@
-//Plotly.d3.csv("https://raw.githubusercontent.com/plotly/datasets/master/finance-charts-apple.csv", function(err, rows){
 
-  //function unpack(rows, key) {
-  //return rows.map(function(row) { return row[key]; });
-// } 
+var url1 =  "/exports/total/"
+var url2 =  "/imports/total/"
+TexportMoValue=[]
+TexportPeriod=[]
+TimportMoValue=[]
+TimportPeriod=[]
 
+d3.json(url1).then(function(data) {
+    data.forEach(d => {
+      
+      TexportMoValue.push(d.MoValue),
+      TexportPeriod.push(d.Period)
+    })
+        });
 
+d3.json(url2).then(function(data) {
+    data.forEach(d => {
+    //   console.log(d.MoValue);
+      TimportMoValue.push(d.MoValue),
+      TimportPeriod.push(d.Period)
+    }) 
+});  
 
+console.log(TimportMoValue);
 
-var trace1 = {
-  x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-  y: [20, 14, 25, 16, 18, 22, 19, 15, 12, 16, 14, 17],
+var bar1 = {
+  x: TexportPeriod,
+  y: TexportMoValue,
   type: 'bar',
-  name: 'Primary Product',
+  name: '$ Export',
   marker: {
-    color: 'rgb(49,130,189)',
+    color: 'rgb(0,0,255)',
     opacity: 0.7,
   }
 };
 
-var trace2 = {
-  x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-  y: [19, 14, 22, 14, 16, 19, 15, 14, 10, 12, 12, 16],
+var bar2 = {
+  x: TimportPeriod,
+  y: TimportMoValue,
   type: 'bar',
-  name: 'Secondary Product',
+  name: '$ Import',
   marker: {
-    color: 'rgb(204,204,204)',
+    color: 'rgb(255,0,0)',
     opacity: 0.5
   }
 };
 
-var data = [trace1, trace2];
+var data = [bar1, bar2];
 
 var layout = {
-  title: '2013 Sales Report',
-  xaxis: {
-    tickangle: -45
+  title: 'US Export & Import',
+  "titlefont": {
+    "size": 30,
   },
-  barmode: 'group'
+  xaxis: {
+    tickangle: -45,
+    bargap: 0.001,
+  },
+  
+  barmode: 'stack'
 };
 
-Plotly.newPlot('myDiv', data, layout);
+Plotly.newPlot('plot', data, layout);
