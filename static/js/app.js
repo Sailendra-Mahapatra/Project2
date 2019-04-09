@@ -225,6 +225,7 @@ function buildPie(piedate, inout, renderloc){
     g.append("path")
         .attr("d", arc)
         .style("fill", function(d) { return color(d.data.HSC); })
+        
       // transition 
       .transition()
         .ease(d3.easeLinear)
@@ -232,15 +233,18 @@ function buildPie(piedate, inout, renderloc){
         .attrTween("d", tweenPie);
           
     // append text
-    g.append("text")
+    g.append("text")    
       .transition()
         .ease(d3.easeLinear)
         .duration(2000)
       .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
-        .attr("dy", ".35em")
+        .attr("dy", ".35em")        
         .text(function(d) { return d.data.HSC; })
-        // .on("click",  console.log("happy"))
-  
+        .on("click", function () {
+          var mouse = d3.mouse(this)
+          console.log(mouse)
+        })
+        // .on("click",  function() {console.log("happy")})
       
   });
 
@@ -390,9 +394,13 @@ function malikBuild() {
   }
 
 function optionChanged(newdate) {
-  var svg = d3.selectAll("svg");
-svg.select("svg").remove()
-    
+  var svg = d3.select("#bars");
+  var exportPie = d3.select("#export-pie")
+  var importPie = d3.select("#import-pie")
+  svg.selectAll("svg").remove()
+  exportPie.selectAll("svg").remove()
+  importPie.selectAll("svg").remove()
+
   console.log(newdate)
         // CLEAR THE OLD GRAPHS!!!!
   // //   // Fetch new data each time a new sample is selected
