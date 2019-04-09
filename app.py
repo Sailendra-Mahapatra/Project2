@@ -92,7 +92,8 @@ def slices(hsc, year):
         hsc_ind_imports["Year"] = result[2]
         hsc_ind_imports["HSC"] = result[3] 
 
-    return jsonify(hsc_ind_imports)
+    return j
+    sonify(hsc_ind_imports)
 
 @app.route("/imports/pie/<year>")
 def pies(year):
@@ -130,8 +131,9 @@ def expies(year):
 def trees(year):
     stmt = db.session.query(Imports).statement
     df = pd.read_sql_query(stmt, db.session.bind)
+    df["HSC"] =pd.to_numeric(df["HSC"])
     first_2015 = df[df["Period"].str.contains(f"{year}")]
-    data_2015 = first_2015.groupby(["Description", "HSC"])["MoValue"].sum()
+    data_2015 = first_2015.groupby(["Description", "HSC"])["YTDValue"].sum()
     test= pd.DataFrame({"total" : data_2015})
     data_2015= test.nlargest(50,"total")
     data_2015 = data_2015.reset_index()

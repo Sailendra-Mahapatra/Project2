@@ -181,7 +181,7 @@ function buildPie(piedate, inout, renderloc){
   var svg = d3.select(renderloc).append("svg")
       .attr("width", width)
       .attr("height", height)
-    .append("g")
+      .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
   
       var tooltip = d3.select("body")
@@ -225,6 +225,7 @@ function buildPie(piedate, inout, renderloc){
     g.append("path")
         .attr("d", arc)
         .style("fill", function(d) { return color(d.data.HSC); })
+        
       // transition 
       .transition()
         .ease(d3.easeLinear)
@@ -232,15 +233,18 @@ function buildPie(piedate, inout, renderloc){
         .attrTween("d", tweenPie);
           
     // append text
-    g.append("text")
+    g.append("text")    
       .transition()
         .ease(d3.easeLinear)
         .duration(2000)
       .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
-        .attr("dy", ".35em")
+        .attr("dy", ".35em")        
         .text(function(d) { return d.data.HSC; })
-        // .on("click",  console.log("happy"))
-  
+        .on("click", function () {
+          var mouse = d3.mouse(this)
+          console.log(mouse)
+        })
+        // .on("click",  function() {console.log("happy")})
       
   });
 
@@ -389,24 +393,45 @@ function malikBuild() {
   update(bothData);
   }
 
-// function optionChanged(newdate) {
-      
+  function make_treemap(){
+    d3.json("/imports/tree/2018").then(function(data) {
+      console.log(data)
+     
+   var vizio = d3plus.viz()
+    .container(d3.select("#plots"))  // container DIV to hold the visualization
+    .data(data)  // data to use with the visualization
+    .type("tree_map")   // visualization type
+    .id(HSC)         // key for which our data is unique on    
+    .size(total)      // sizing of blocks
+    .draw()             // finally, draw the visualization!
+   
+    })
 
-//   console.log(newdate)
+  }
+function optionChanged(newdate) {
+  var svg = d3.select("#bars");
+  var exportPie = d3.select("#export-pie")
+  var importPie = d3.select("#import-pie")
+  svg.selectAll("svg").remove()
+  exportPie.selectAll("svg").remove()
+  importPie.selectAll("svg").remove()
 
-//   // //   // Fetch new data each time a new sample is selected
-//   buildPie(newdate, "imports", "#import-pie")
-//   buildPie(newdate, "exports", "#export-pie")
-//   updateBar("2018", "3915", "#bars")
-//   console.log(newdate)
+  console.log(newdate)
+        // CLEAR THE OLD GRAPHS!!!!
+  // //   // Fetch new data each time a new sample is selected
+  buildPie(newdate, "imports", "#import-pie")
+  buildPie(newdate, "exports", "#export-pie")
+  buildBar(newdate, "3915", "#bars")
+  console.log(newdate)
 
-//   }
+  }
 
+  
 function init(){
   buildPie("2018", "imports", "#import-pie")
   buildPie("2018", "exports", "#export-pie")
   buildBar("2018", "3915", "#bars")
-
+  make_treemap()
 }
 
 init()

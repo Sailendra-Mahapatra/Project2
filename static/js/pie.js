@@ -50,13 +50,13 @@ d3.json(inout+"/pie/"+piedate).then(function(data) {
         d.HSC = d.HSC;
         d.Description = d.Description
         d.data 
-      //  console.log(d.total)
+       console.log(d.total)
     });
    
   // "g element is a container used to group other SVG elements"
   var g = svg.selectAll(".arc")
       .data(pie(data))
-    .enter().append("g")
+      .enter().append("g")
       .attr("class", "arc");
 
   // append path 
@@ -79,6 +79,29 @@ d3.json(inout+"/pie/"+piedate).then(function(data) {
       .text(function(d) { return d.data.Description; });
     
 
+    // "g element is a container used to group other SVG elements"
+//   var g2 = svg2.selectAll(".arc2")
+//       .data(pie(data))
+//     .enter().append("g")
+//       .attr("class", "arc2");
+
+//    // append path 
+//   g2.append("path")
+//       .attr("d", arc2)
+//       .style("fill", function(d) { return color(d.data.Commodity); })
+//     .transition()
+//       .ease(d3.easeLinear)
+//       .duration(2000)
+//       .attrTween("d", tweenDonut);
+        
+//    // append text
+//   g2.append("text")
+//     .transition()
+//       .ease(d3.easeLinear)
+//       .duration(2000)
+//     .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+//       .attr("dy", ".35em")
+//       .text(function(d) { return d.data.Commodity; });
     
 });
 
@@ -89,21 +112,22 @@ function tweenPie(b) {
   return function(t) { return arc(i(t)); };
 }
 
-
+// function tweenDonut(b) {
+//   b.innerRadius = 0;
+//   var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
+//   return function(t) { return arc2(i(t)); };
+// }
 };
 
 
-// function optionChanged(newdate) {
-//   console.log(newdate)
-
-//   // //   // Fetch new data each time a new sample is selected
-//   buildPie(newdate, "imports", "#import-pie")
-//   buildPie(newdate, "exports", "#export-pie")
-//   console.log(newdate)
-
-//   }
-// function init(){
-//   buildPie("2018", "imports", "#import-pie")
-//   buildPie("2018", "exports", "#export-pie")
-// }
-// init()
+function optionChanged(newdate) {
+  // //   // Fetch new data each time a new sample is selected
+  console.log(newdate)
+  buildPie(newdate, "imports", "#import-pie")
+  buildPie(newdate, "exports", "#export-pie")
+  }
+function init(){
+  buildPie("2018", "imports", "#import-pie")
+  buildPie("2018", "exports", "#export-pie")
+}
+init()

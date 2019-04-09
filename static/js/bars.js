@@ -105,7 +105,7 @@ function update(data) {
 function optionChanged(newdate) {
     // //   // Fetch new data each time a new sample is selected
     console.log(newdate)
-    updateBar(newdate)
+    updatebuildBar(newdate)
     }
   function init(){
     buildBar("2018")
