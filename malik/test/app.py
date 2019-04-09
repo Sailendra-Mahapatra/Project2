@@ -19,7 +19,7 @@ from flask import Flask, jsonify, render_template
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///data/china_trade.sqlite"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://///data/china_trade.sqlite"
 db = SQLAlchemy(app)
 Base = automap_base()
 Base.prepare(db.engine, reflect = True)

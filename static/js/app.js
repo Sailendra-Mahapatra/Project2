@@ -1,5 +1,5 @@
 
-function buildBar(bardate, hsc, renderloc, optionChanged(bardate)) {//renderloc
+function buildBar(bardate, hsc, renderloc) {//renderloc
 
   var svgWidth = 900
   var svgHeight = 500
