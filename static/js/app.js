@@ -1,4 +1,9 @@
 var parseTime = d3.timeParse("%Y-%m");
+
+var tooltip = d3.select("body")
+.append("div")
+.attr("class", "tooltip")
+.style("opacity", 0);       
 function clicker(d){
   var svg = d3.select("#bars");
   svg.selectAll("svg").remove()
@@ -55,7 +60,7 @@ var y=  d3.scaleLinear().rangeRound([height, 0]);
 //     .range([0, width]);
 // var y = d3.scaleLinear()
 //     .range([height, 0]);
-              
+  
 
 d3.json("/imports/bars/"+bardate+"/"+hsc).then(function(data) {
   console.log(data)
@@ -111,19 +116,22 @@ console.log(d3.max(data, function(d){return d.MoValue}))
       .attr("width", x.bandwidth())
       .attr("height", function (d) {
           return  height-y(Number(d.MoValue));
+      })
+      .on("mouseover", function(d){tooltip.transition()
+        .duration(200)
+        .style("opacity", 9);
+        tooltip.html("Monthly Value:<BR><strong>$ "+(d.MoValue/1e6).toLocaleString('en', {useGrouping:true})+" Million")
+          .style("left", (d3.event.pageX)+ "px")
+          .style("top", (d3.event.pageY - 100) + "px")})
+          .on("mouseout", function(d) {
+        tooltip.transition()
+            .duration(500)
+            .style("opacity", 0);
       });
-     legend = svg.append("g")
-      .attr("class", "legend")
-      .attr("transform", "translate(50,30)")
-      .style("font-size", "12px")
-      .call(d3.legend)
-      
- 
-    })  
-  }
-      })  
+    });  
+  };
+      })  ;
 
-      
       function optionChanged(bardate){
 
         var svgWidth = 900
@@ -159,8 +167,7 @@ console.log(d3.max(data, function(d){return d.MoValue}))
             return data   
       })
       return data
-      } 
-    
+      }    
 }
 
 function buildGrouped() {// bardate, hsc, renderloc
@@ -333,7 +340,6 @@ function buildPie(piedate, inout, renderloc){
       height = 400 - margin.top - margin.bottom,
       radius = 150;
   
-  
   var color = d3.scaleOrdinal()
   .range(["#BBDEFB", "#90CAF9", "#64B5F6", "#42A5F5", "#2196F3", "#1E88E5", "#1976D2","#004d99","#003366","#001a33"]);
   
@@ -357,10 +363,6 @@ function buildPie(piedate, inout, renderloc){
       .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
   
-      var tooltip = d3.select("body")
-      .append("div")
-      .attr("class", "tooltip")
-      .style("opacity", 0);
  
   // svg.call(tip);
   // import data 
@@ -413,7 +415,7 @@ function buildPie(piedate, inout, renderloc){
         .duration(2000)
       .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
         .attr("dy", ".35em")        
-        .text(function(d) { return (d.data.total/1e10).toLocaleString('en', {useGrouping:true})+" Billion" })
+        .text(function(d) { return (d.data.total/1e9).toLocaleString('en', {useGrouping:true})+" Billion" })
                      
   });
 
