@@ -167,7 +167,7 @@ def impbars(year, hsc):
     return jsonify(products)
 
 @app.route("/exports/bars/<year>/<hsc>")
-def expbars(year, hsc):
+def pbars(year, hsc):
     stmt = db.session.query(Exports).statement
     df = pd.read_sql_query(stmt, db.session.bind)
     # df["MoValue"] = pd.to_numeric(df["MoValue"])

@@ -71,15 +71,13 @@ console.log()
 
       x.domain(data.map(function(d) { return parseTime(d.Period)}));
       y.domain([0, d3.max(data, function(d){return d.MoValue})])
-console.log(d3.max(data, function(d){return d.MoValue}))
               
       g.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b")))
       data.forEach(function(d){
-
+        Period = d.Period
         Description = d.Description
-        console.log(data)
       });
       g.append("g")
       .call(d3.axisLeft(y)
@@ -100,8 +98,8 @@ console.log(d3.max(data, function(d){return d.MoValue}))
         .attr("y", 0-(margin.top/2))
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
-        .style("text-decoration", "underline")
-        .text("Commodity: "+Description)
+        // .style("text-decoration", "underline")
+        .html("Commodity: "+Description+"<BR>  "+ (Period))
 
       g.selectAll(".bar")
       .data(data)
@@ -382,7 +380,7 @@ function buildPie(piedate, inout, renderloc){
 //Pie Slices
     var g = svg.selectAll(".arc")
         .data(pie(data))
-      .enter().append("g")
+        .enter().append("g")
         .attr("class", "arc")
         .on("mouseover", function(d){tooltip.transition()
                                             .duration(200)
@@ -405,7 +403,7 @@ function buildPie(piedate, inout, renderloc){
       // transition 
       .transition()
         .ease(d3.easeLinear)
-        .duration(2000)
+        .duration(500)
         .attrTween("d", tweenPie);
           
     // append text
@@ -430,7 +428,101 @@ function buildPie(piedate, inout, renderloc){
   };
 
  // BAR OF TOTAL IMPORTS AND EXPORTS
+ function totalBuild(){
+ var svgWidth = 900
+ var svgHeight = 500
 
+
+axisTicks = {qty: 5, outerSize: 0, dateFormat: '%m-%d'};
+var	parseDate = d3.time.format("%Y-%m").parse;
+var parseTime = d3.timeParse("%d-%b-%y");
+var colors = ["b33040", "#d25c4d", "#f2b447", "#d9d574"];
+
+var container = d3.selectAll(renderloc)
+.append("svg")
+.attr("width", 800)
+.attr("height", 600)
+             
+
+
+var svg = d3.select("svg"),
+margin= {
+ top: 30,
+  right: 20, 
+  bottom: 30, 
+  left: 50},
+width = container.attr("width") - margin.left - margin.right,
+height = container.attr("height") -  margin.top - margin.bottom,
+g = container.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var x = d3.scaleBand().rangeRound([0, width], .5).padding(.1);
+
+var y=  d3.scaleLinear().rangeRound([height, 0]);
+
+d3.json("/imports/bars/totals").then(function(data) {
+  d3.json("/imports/bars/totals").then(function(data){
+  x.domain(data.map(function(d) { return parseTime(d.Period)}));
+  y.domain([0, d3.max(data, function(d){return d.MoValue})])
+console.log(d3.max(data, function(d){return d.MoValue}))
+          
+  g.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b")))
+  data.forEach(function(d){
+
+    Description = d.Description
+    console.log(data)
+  });
+  g.append("g")
+  .call(d3.axisLeft(y)
+      .ticks(20)
+      .tickFormat(d3.formatPrefix(".1", 1e6)))
+  .append("text")
+  .attr("fill", "#000")
+  .attr("transform", "rotate(-90)")
+   .attr("x", -100)
+  .attr("y", -50)
+  .attr("dy", "0.71em")
+  .attr("text-anchor", "end")
+  .style("font-size", "12px")
+  .text("Monthly Trade Value")
+ 
+  g.append("text")
+    .attr("x", (width /2))
+    .attr("y", 0-(margin.top/2))
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .style("text-decoration", "underline")
+    .text("Commodity: "+Description)
+
+  g.selectAll(".bar")
+  .data(data)
+  .enter().append("rect")
+  .attr("class", "bar")
+  .attr("x", function (d) {
+      return x(parseTime(d.Period));
+  })
+  .attr("y", function (d) {
+      return y(Number(d.MoValue));
+  })
+  .attr("width", x.bandwidth())
+  .attr("height", function (d) {
+      return  height-y(Number(d.MoValue));
+  })
+  .on("mouseover", function(d){tooltip.transition()
+    .duration(200)
+    .style("opacity", 9);
+    tooltip.html("Monthly Value:<BR><strong>$ "+(d.MoValue/1e6).toLocaleString('en', {useGrouping:true})+" Million")
+      .style("left", (d3.event.pageX)+ "px")
+      .style("top", (d3.event.pageY - 100) + "px")})
+      .on("mouseout", function(d) {
+    tooltip.transition()
+        .duration(500)
+        .style("opacity", 0);
+  });
+});
+})
+ }
 
   function make_treemap(){
   //   d3.json("/imports/tree/2018").then(function(data) {
