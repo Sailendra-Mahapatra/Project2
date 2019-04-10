@@ -3,10 +3,12 @@ var parseTime = d3.timeParse("%Y-%m");
 var tooltip = d3.select("body")
 .append("div")
 .attr("class", "tooltip")
-.style("opacity", 0);       
+.style("opacity", 0);   
+    
 function clicker(d){
   var svg = d3.select("#bars");
   svg.selectAll("svg").remove()
+  
   buildBar("2018", d.data.HSC, "#bars")
 
 console.log(d)     
@@ -39,7 +41,7 @@ function buildBar(bardate, hsc, renderloc) {//renderloc
 
 var container = d3.selectAll(renderloc)
 .append("svg")
-.attr("width", 600)
+.attr("width", 800)
 .attr("height", 600)
               
 
@@ -68,7 +70,11 @@ console.log(bardate)
   if (data != null){
     d3.json("/exports/bars/"+bardate+"/"+hsc).then(function(data){
 console.log()
-
+d3.selectAll("input")
+.on("change", update)
+// console.log(data)
+function update(bardate = this.value){
+  console.log(bardate)}
       x.domain(data.map(function(d) { return parseTime(d.Period)}));
       y.domain([0, d3.max(data, function(d){return d.MoValue})])
               
@@ -86,8 +92,8 @@ console.log()
       .append("text")
       .attr("fill", "#000")
       .attr("transform", "rotate(-90)")
-       .attr("x", -100)
-      .attr("y", -50)
+       .attr("x", -15)
+      .attr("y", -51)
       .attr("dy", "0.71em")
       .attr("text-anchor", "end")
       .style("font-size", "12px")
@@ -101,10 +107,10 @@ console.log()
         // .style("text-decoration", "underline")
         .html("Commodity: "+Description+"<BR>  "+ (Period))
 
-      g.selectAll(".bar")
+  var bar=    g.selectAll(".bar")
       .data(data)
       .enter().append("rect")
-      .transition().duration(3000)
+     bar.transition().duration(1000)
       .delay( function(d,i) { return i * 200; })
       .attr("class", "bar")
       .attr("x", function (d) {
@@ -117,13 +123,13 @@ console.log()
       .attr("height", function (d) {
           return  height-y(Number(d.MoValue));
       })
-      .on("mouseover", function(d){tooltip.transition()
+     bar.on("mouseover", function(d){tooltip.transition()
         .duration(200)
         .style("opacity", 9);
         tooltip.html("Monthly Value:<BR><strong>$ "+(d.MoValue/1e6).toLocaleString('en', {useGrouping:true})+" Million")
           .style("left", (d3.event.pageX)+ "px")
           .style("top", (d3.event.pageY - 100) + "px")})
-          .on("mouseout", function(d) {
+       bar.on("mouseout", function(d) {
         tooltip.transition()
             .duration(500)
             .style("opacity", 0);
@@ -336,7 +342,7 @@ function buildGrouped() {// bardate, hsc, renderloc
 function buildPie(piedate, inout, renderloc){
   // margin
   var margin = {top: 50, right: 50, bottom: 50, left: 50},
-      width = 400 - margin.right - margin.left,
+      width = 600 - margin.right - margin.left,
       height = 400 - margin.top - margin.bottom,
       radius = 150;
   
@@ -368,7 +374,7 @@ function buildPie(piedate, inout, renderloc){
   // import data 
   d3.json(inout+"/pie/"+piedate).then(function(data) {
       d3.selectAll("input")
-        .on("change", update)
+        .on("change", Pieupdate)
         // console.log(data)
 
       data.forEach(function(d){
@@ -377,7 +383,7 @@ function buildPie(piedate, inout, renderloc){
           d.Description = d.Description
           d.data 
       });
-     function update(piedate = this.value){
+     function Pieupdate(piedate = this.value){
         console.log(piedate)}
 //Pie Slices
     var g = svg.selectAll(".arc")
@@ -399,7 +405,7 @@ function buildPie(piedate, inout, renderloc){
     // append path 
     g.append("path")
         .attr("d", arc)
-        .style("fill", function(d) { return color(d.data.HSC); })
+        .style("fill", function(d, i) { return color(d.data.HSC); })
         .on("click",function(d) { clicker(d) })
 
       // transition 
@@ -415,9 +421,23 @@ function buildPie(piedate, inout, renderloc){
         .duration(2000)
       .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
         .attr("dy", ".35em")        
-        .text(function(d) { return (d.data.total/1e9).toLocaleString('en', {useGrouping:true})+" Billion" })
+        .text(function(d) { return (d.data.total/1e9).toLocaleString('en', {useGrouping:true})+" Billion"+"\n"})
+        
+
+        svg.append('g')
+  .attr('class', 'legend')
+  .selectAll('text')
+  .data(data)
+  .enter()
+  .append('g')
+  .append('text')
+  .text(function(d){return (d.Description).split("", 2)})
+  .attr('fill', function(d, i) { return color(i); })
+          .attr('y', function(d, i) { return 20 * (i + 1); })
+          .attr('x', 50)
                      
   });
+
 
   // Helper function for animation of pie chart and donut chart
   function tweenPie(b) {

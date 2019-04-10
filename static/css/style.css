@@ -3,10 +3,10 @@
 } */
 body {
   background-color: #005889;
-background-image: radial-gradient(at 0 bottom,rgba(0, 54, 137, 0.7) 0,rgba(0, 54, 137, 0) 60%),radial-gradient(at 90% bottom,#006389 0,rgba(0, 99, 137, 0) 40%),radial-gradient(at 50% top,rgba(0, 111, 137, 0.6) 0,rgba(0, 111, 137, 0) 75%),radial-gradient(at right top,#004D89 0,rgba(0, 77, 137, 0) 57%);
+/* background-image: radial-gradient(at 0 bottom,rgba(0, 54, 137, 0.7) 0,rgba(0, 54, 137, 0) 60%),radial-gradient(at 90% bottom,#006389 0,rgba(0, 99, 137, 0) 40%),radial-gradient(at 50% top,rgba(0, 111, 137, 0.6) 0,rgba(0, 111, 137, 0) 75%),radial-gradient(at right top,#004D89 0,rgba(0, 77, 137, 0) 57%); */
 background-repeat: no-repeat;
 background-size: auto,auto,100% 1000px,100% 1000px;
-color: #B5D9EC;
+color: black
 }
 
 .card-header{
@@ -32,10 +32,10 @@ color: #B5D9EC;
 } */
 
 .card-body{
-  padding-left:5%;
+  padding-left:3%;
   margin-top:1%;
   margin-bottom: 5%; 
-  background-color: grey
+ 
 }
 
 ::-webkit-scrollbar {
@@ -61,7 +61,9 @@ color: #B5D9EC;
   padding-bottom: 10%;
 }
 
-
+.legend {
+  font-size: 14px;
+}
 div.tooltip {	
   position: absolute;			
   text-align: center;	
@@ -70,8 +72,8 @@ div.tooltip {
   height: 10%;					
   padding: 2px;		
   margin: 1px;		
-  font: 12px sans-serif;		
-  background: lightsteelblue;	
+  font: 12px sans-serif;
+  	background: grey;	
   border: 0px;		
   border-radius: 8px;			
   pointer-events: none;			
@@ -99,6 +101,7 @@ div.tooltip {
   }
   svg{
       text-align: center;
+      text-overflow: clip
       
   }
   
