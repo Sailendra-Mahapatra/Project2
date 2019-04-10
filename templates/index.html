@@ -6,11 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Datatronics : Trade Wars - China</title>
+  <script src="https://cdn.plot.ly/plotly-latest.js" charset="utf-8"></script>
+
   <script src="https://d3js.org/d3.v5.min.js"></script>
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<!-- <script src="plotly-latest.min.js"></script> -->
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -79,10 +80,10 @@
               <div class="card-header"> 
                 <div class="btn-toolbar  " role="toolbar" aria-label="Toolbar with button groups">
                   
-                      <input type="button" value="2015" onclick="optionChanged(this.value)" >2015</input>
-                      <input type="button" value="2016" onclick="optionChanged(this.value)" >2016</input>
-                      <input type="button" value="2017" onclick="optionChanged(this.value)" >2017</input>
-                      <input type="button" value="2018" onclick="optionChanged(this.value)">2018</input>
+                      <input type="button" value="2015" onclick="optionChanged(this.value)" ></input>
+                      <input type="button" value="2016" onclick="optionChanged(this.value)" ></input>
+                      <input type="button" value="2017" onclick="optionChanged(this.value)" ></input>
+                      <input type="button" value="2018" onclick="optionChanged(this.value)"></input>
                     </div>
                   <!-- <input id= "search" class="form-control" type="text" placeholder="Search" aria-label="Search">                     -->
                 </select>    
@@ -102,13 +103,15 @@
   
   </div> <!--end 1st row-->
 </div>
-<div class = "container-fluid">
     <div class = row>
-        <div class ="col-md-12">
-            <div class="card text-black bg-secondary mt-1 mb-3"  style="max-width:100%;">
+        <div class ="col-md-12 m-4" id ="plot">
+            <!-- <div class="cards text-black bg-secondary"  style="max-width:100%;">
+              <div class="card-header"></div>
                 <div class = "card-body" id= "plot"></div>                               
-              </div>    
+              </div>     -->
           </div> 
+    </div>      
+   
 <!--end of cards-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
@@ -117,6 +120,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
      <!-- <script src="{{ url_for('static', filename='js/bonus.js') }}"></script> -->
      <!-- <script src="../static/js/app.js"></script> -->
+
      <script src="../static/js/app.js"></script>
 
      <!-- <script src="../static/js/pie.js"></script>  -->

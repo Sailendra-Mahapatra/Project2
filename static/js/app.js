@@ -86,6 +86,7 @@ function update(bardate = this.value){
         Period = d.Period
         Description = d.Description
       });
+      
       g.append("g")
       .call(d3.axisLeft(y)
           .ticks(20)
@@ -93,7 +94,7 @@ function update(bardate = this.value){
       .append("text")
       .attr("fill", "#000")
       .attr("transform", "rotate(-90)")
-       .attr("x", -15)
+       .attr("x", -100)
       .attr("y", -51)
       .attr("dy", "0.71em")
       .attr("text-anchor", "end")
@@ -583,7 +584,51 @@ console.log(d3.max(data, function(d){return d.MoValue}))
   //   })
 
   }
+  function easyGroup(hsc){
+    d3.json("imports/grouped/"+hsc).then(function(data) {
+      console.log(data)
+       data.forEach(d => {
+        
+        firstMoValue = d.tfif.MoValue
+        firstMoPeriod = d.tfif.Period
+        secondMoValue = d.tsix.MoValue
+        secondMoPeriod = d.tsix.Period
+        console.log(firstMoValue)
+        console.log(firstMoPeriod)
 
+     
+      })  
+  tfifval = [] 
+     data.map(function (d) {return tfifval= d.tfif.MoValue})
+  tfifper = []
+  data.map(function (d) {return tfifper= d.tfif.Period})   
+  var data = [{
+    x: tfifper,
+    y: tfifval,
+    type: 'bar'
+   
+  }];
+
+  console.log(data)
+  // var trace2 = {
+  //   x: firstMoPeriod,
+  //   y: secondMoValue,
+  //   type: 'bar',
+  //   name: 'Secondary Product'
+   
+    
+  // };
+  
+  // var data = [trace1, trace2];
+  // console.log(data)
+  // var layout = {
+  
+  //   barmode: 'bar'
+  // };
+  
+  Plotly.newPlot('plot', data);
+});
+}
 function optionChanged(newdate) {
   var svg = d3.select("#bars");
   var exportPie = d3.select("#export-pie")
@@ -609,7 +654,8 @@ function init(){
   buildPie("2018", "imports", "#import-pie")
   buildPie("2018", "exports", "#export-pie")
   buildBar("2018", "1201", "#bars")
-  buildGrouped()
+  // easyGroup("1201")
+
 
 }
 

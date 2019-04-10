@@ -248,7 +248,7 @@ def impgroups(hsc):
     list_2018 =data_2018_import.to_dict()
 
 
-    dicimport =[{"2015" : list_2015,"2016" : list_2016, "2017": list_2017, "2018":list_2018}]
+    dicimport =[{"tfif" : list_2015,"tsix" : list_2016, "tseven": list_2017, "teight":list_2018}]
 
     # def yearly_data(year):#will add hsc variable
     #     data = products[products["Period"].str.contains(year)]
@@ -288,9 +288,9 @@ def expgroups(hsc):
     df = pd.read_sql_query(stmt2, db.session.bind)
     
 
-    data_2015_export = yearly_data(df2,"2015")
-    data_2016_export = yearly_data(df2,"2016")
-    data_2017_export = yearly_data(df2,"2017")
+    data_2015_export = yearly_data(df2,"tfif")
+    data_2016_export = yearly_data(df2,"tsix")
+    data_2017_export = yearly_data(df2,"tseven")
     data_2018_export = yearly_data(df2,"2018")
     total_import_export =  pd.DataFrame({"year":["2015","2016","2017","2018"],
                                      "export":[data_2015_export["total"].sum(),data_2016_export["total"].sum(),data_2017_export["total"].sum(),data_2018_export["total"].sum()]})
