@@ -8,12 +8,13 @@ var tooltip = d3.select("body")
 function clicker(d){
   var svg = d3.select("#bars");
   svg.selectAll("svg").remove()
-  
+  newcode = {}
   buildBar("2018", d.data.HSC, "#bars")
-
+ return newcode
 console.log(d)     
 }
-
+newcode = {}
+console.log(newcode)
 function buildSelector(date) {
 d3.json("/imports/bars/"+date).then(function(response){
   selection= d3.select("#filter")
@@ -342,12 +343,12 @@ function buildGrouped() {// bardate, hsc, renderloc
 function buildPie(piedate, inout, renderloc){
   // margin
   var margin = {top: 50, right: 50, bottom: 50, left: 50},
-      width = 600 - margin.right - margin.left,
+      width = 400 - margin.right - margin.left,
       height = 400 - margin.top - margin.bottom,
       radius = 150;
   
   var color = d3.scaleOrdinal()
-  .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"])
+  .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56"])
   
   var arc = d3.arc()
       .outerRadius(radius - 10)
@@ -367,7 +368,7 @@ function buildPie(piedate, inout, renderloc){
       .attr("width", width)
       .attr("height", height)
       .append("g")
-      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+      .attr("transform", "translate(" + width / 2  + "," + height /2  + ")");
   
  
   // svg.call(tip);
@@ -423,18 +424,39 @@ function buildPie(piedate, inout, renderloc){
         .attr("dy", ".35em")        
         .text(function(d) { return (d.data.total/1e9).toLocaleString('en', {useGrouping:true})+" Billion"+"\n"})
         
-
-        svg.append('g')
-  .attr('class', 'legend')
-  .selectAll('text')
-  .data(data)
-  .enter()
-  .append('g')
-  .append('text')
-  .text(function(d){return (d.Description).split("", 2)})
-  .attr('fill', function(d, i) { return color(i); })
-          .attr('y', function(d, i) { return 20 * (i + 1); })
-          .attr('x', 50)
+        var legendRectSize = 18;                                  
+        var legendSpacing = 5; 
+    var legend =   svg.selectAll('.legend')
+    .data(function(d, i) { return color(i); })
+    .enter()
+    .append('g')
+    .attr('class', 'legend')
+    .attr('transform', function(d, i) {                     
+      var height = legendRectSize + legendSpacing;          
+      var offset =  height * (function(d) { return d.Description}).length / 2;     
+      var horz = -2 * legendRectSize;                       
+      var vert = i * height - offset;                       
+      return 'translate(' + horz + ',' + vert + ')';        
+    });
+    // legend.append('rect')                                     // NEW
+    // .attr('width', legendRectSize)                          // NEW
+    // .attr('height', legendRectSize)                         // NEW
+    // .style('fill', color)                                   // NEW
+    // .style('stroke', color);  
+    // legend.append('text')   
+    // .text(function(d){return (d.Description).split(" ", 2)})
+    // .attr('x', -100)              // NEW
+    // .attr('y', -200)              // NEW
+  // .attr('class', 'legend')
+  // .selectAll('text')
+  // .data(data)
+  // .enter()
+  // .append('g')
+  // .append('text')
+  // .text(function(d){return (d.Description).split(" ", 2)})
+  // .attr('fill', function(d, i) { return color(i); })
+  //         .attr('y', function(d, i) { return 20 * (i - 1); })
+  //         .attr('x', 50)
                      
   });
 
@@ -569,13 +591,15 @@ function optionChanged(newdate) {
   svg.selectAll("svg").remove()
   exportPie.selectAll("svg").remove()
   importPie.selectAll("svg").remove()
-
+ 
+  newcode = {}
+  console.log(newcode)
   console.log(newdate)
         // CLEAR THE OLD GRAPHS!!!!
   // //   // Fetch new data each time a new sample is selected
   buildPie(newdate, "imports", "#import-pie")
   buildPie(newdate, "exports", "#export-pie")
-  buildBar(newdate, "3915", "#bars")
+  buildBar(newdate, "1201", "#bars")
   console.log(newdate)
 
   }
@@ -584,7 +608,7 @@ function optionChanged(newdate) {
 function init(){
   buildPie("2018", "imports", "#import-pie")
   buildPie("2018", "exports", "#export-pie")
-  buildBar("2018", "3915", "#bars")
+  buildBar("2018", "1201", "#bars")
   buildGrouped()
 
 }
