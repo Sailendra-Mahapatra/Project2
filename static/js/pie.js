@@ -77,7 +77,10 @@ d3.json(inout+"/pie/"+piedate).then(function(data) {
     .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
       .attr("dy", ".35em")
       .text(function(d) { return d.data.Description; });
-    
+        
+      
+         
+
 
     // "g element is a container used to group other SVG elements"
 //   var g2 = svg2.selectAll(".arc2")

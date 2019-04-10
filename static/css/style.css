@@ -1,5 +1,12 @@
-body {
+/* body {
 	background-color: #778899	
+} */
+body {
+  background-color: #005889;
+background-image: radial-gradient(at 0 bottom,rgba(0, 54, 137, 0.7) 0,rgba(0, 54, 137, 0) 60%),radial-gradient(at 90% bottom,#006389 0,rgba(0, 99, 137, 0) 40%),radial-gradient(at 50% top,rgba(0, 111, 137, 0.6) 0,rgba(0, 111, 137, 0) 75%),radial-gradient(at right top,#004D89 0,rgba(0, 77, 137, 0) 57%);
+background-repeat: no-repeat;
+background-size: auto,auto,100% 1000px,100% 1000px;
+color: #B5D9EC;
 }
 
 .card-header{
@@ -8,8 +15,8 @@ body {
 
 .cards {
   margin-left: 0%;
-  margin-right: 5%;
-  padding-left: 5%;
+  margin-right: 2%;
+  padding-left: 2%;
   padding-right: 8%;
   margin-top: 8%;
   padding-bottom: 10%;
@@ -17,7 +24,13 @@ body {
 }
 #bars{
   background-color: gainsboro
+ 
 }
+/* h3{
+  background-color: gainsboro;
+  display: block
+} */
+
 .card-body{
   padding-left:5%;
   margin-top:1%;
@@ -65,9 +78,9 @@ div.tooltip {
 }
 
 .cards {
-  margin-left: 5%;
+  margin-left: 2%;
   margin-right: 5%;
-  padding-left: 2%;
+  padding-left: 0%;
   padding-right:2%;
   margin-top:  3%;
   padding-bottom: 10%;
@@ -85,7 +98,8 @@ div.tooltip {
     stroke: #fff;
   }
   svg{
-      text-align: center
+      text-align: center;
+      
   }
   
   .arc2 text {
@@ -121,50 +135,5 @@ div.tooltip {
 
 
 
-<<<<<<< HEAD
-  .charter {
-  	margin-left: 5%;
-    margin-right: 5%;
-    padding-left: 5%;
-    padding-right:8%;
-    margin-top:  0%;
-    padding-bottom: 10%;
-  }
-    .cards {
-      margin-left: 0%;
-      margin-right: 5%;
-      padding-left: 5%;
-      padding-right: 8%;
-      margin-top: 8%;
-      padding-bottom: 10%;
-
-    }
-
-    div.tooltip {	
-      position: absolute;			
-      text-align: center;	
-      		
-      width: 15%;					
-      height: 10%;					
-      padding: 2px;		
-      margin: 1px;		
-      font: 12px sans-serif;		
-      background: lightsteelblue;	
-      border: 0px;		
-      border-radius: 8px;			
-      pointer-events: none;			
-  }
-	.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
-.x.axis path {
-  display: none;
-}
-=======
 
     
->>>>>>> 6b57ce5e87c696e640350bef25f1d3e6641d3922

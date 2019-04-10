@@ -17,8 +17,8 @@ var container = d3.selectAll("#bars")
 
 var svg = d3.select("svg"),
 margin= {
-    top: 30,
-     right: 20, 
+    top: 50,
+     right: 50, 
      bottom: 30, 
      left: 50},
 width = container.attr("width") - margin.left - margin.right,

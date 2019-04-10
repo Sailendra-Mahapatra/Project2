@@ -34,7 +34,7 @@ function buildBar(bardate, hsc, renderloc) {//renderloc
 
 var container = d3.selectAll(renderloc)
 .append("svg")
-.attr("width", 800)
+.attr("width", 600)
 .attr("height", 600)
               
 
@@ -88,6 +88,8 @@ console.log(d3.max(data, function(d){return d.MoValue}))
       g.selectAll(".bar")
       .data(data)
       .enter().append("rect")
+      .transition().duration(3000)
+      .delay( function(d,i) { return i * 200; })
       .attr("class", "bar")
       .attr("x", function (d) {
           return x(parseTime(d.Period));
@@ -360,7 +362,7 @@ function buildPie(piedate, inout, renderloc){
   
   
   var color = d3.scaleOrdinal()
-  .range(["#BBDEFB", "#90CAF9", "#64B5F6", "#42A5F5", "#2196F3", "#1E88E5", "#1976D2","#004d99","#003366","#001a33"]);
+  .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"])
   
   var arc = d3.arc()
       .outerRadius(radius - 10)
