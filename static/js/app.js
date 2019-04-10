@@ -59,11 +59,11 @@ var y=  d3.scaleLinear().rangeRound([height, 0]);
 
 d3.json("/imports/bars/"+bardate+"/"+hsc).then(function(data) {
   console.log(data)
-
+console.log(bardate)
   if (data != null){
     d3.json("/exports/bars/"+bardate+"/"+hsc).then(function(data){
-console.log(data)
-  
+console.log()
+
       x.domain(data.map(function(d) { return parseTime(d.Period)}));
       y.domain([0, d3.max(data, function(d){return d.MoValue})])
 console.log(d3.max(data, function(d){return d.MoValue}))
@@ -71,7 +71,11 @@ console.log(d3.max(data, function(d){return d.MoValue}))
       g.append("g")
       .attr("transform", "translate(0," + height + ")")
       .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%b")))
-  
+      data.forEach(function(d){
+
+        Description = d.Description
+        console.log(data)
+      });
       g.append("g")
       .call(d3.axisLeft(y)
           .ticks(20)
@@ -83,8 +87,17 @@ console.log(d3.max(data, function(d){return d.MoValue}))
       .attr("y", -50)
       .attr("dy", "0.71em")
       .attr("text-anchor", "end")
-      .text("Monthly Trade Value");
-  
+      .style("font-size", "12px")
+      .text("Monthly Trade Value")
+     
+      g.append("text")
+        .attr("x", (width /2))
+        .attr("y", 0-(margin.top/2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("text-decoration", "underline")
+        .text("Commodity: "+Description)
+
       g.selectAll(".bar")
       .data(data)
       .enter().append("rect")
@@ -99,7 +112,12 @@ console.log(d3.max(data, function(d){return d.MoValue}))
       .attr("height", function (d) {
           return  height-y(Number(d.MoValue));
       });
-
+     legend = svg.append("g")
+      .attr("class", "legend")
+      .attr("transform", "translate(50,30)")
+      .style("font-size", "12px")
+      .call(d3.legend)
+      
  
     })  
   }
@@ -307,49 +325,6 @@ function buildGrouped() {// bardate, hsc, renderloc
 // });
   
 }      
-function optionChanged(bardate){
-
-  var svgWidth = 900
-  var svgHeight = 500
-
-//Create SVG
-
-// axisTicks = {qty: 5, outerSize: 0, dateFormat: '%m-%d'};
-// var	parseDate = d3.time.format("%Y-%m").parse;
-// var parseTime = d3.timeParse("%d-%b-%y");
-
-// var container = d3.selectAll("#bars")
-// .append("svg")
-// .attr("width", 500)
-// .attr("height", 400)
-              
-
-// var svg = d3.select("svg"),
-// margin= {
-//   top: 30,
-//    right: 20, 
-      //    right: 20, 
-//    right: 20, 
-//    bottom: 30, 
-      //    bottom: 30, 
-//    bottom: 30, 
-//    left: 50},
-// width = container.attr("width") - margin.left - margin.right,
-// height = container.attr("height") -  margin.top - margin.bottom,
-// g = container.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-// var parseTime = d3.timeParse("%Y-%m");
-//   var x = d3.scaleBand().rangeRound([0, width], .5).padding(.1);
-
-// var y=  d3.scaleLinear().rangeRound([height, 0]);
-  d3.json("/imports/bars/"+bardate+"/3915").then(function(data) {
-
-      return data   
-            return data   
-      return data   
-})
-return data
-} 
-
 
 function buildPie(piedate, inout, renderloc){
   // margin
@@ -438,7 +413,7 @@ function buildPie(piedate, inout, renderloc){
         .duration(2000)
       .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
         .attr("dy", ".35em")        
-        .text(function(d) { return d.data.HSC; })
+        .text(function(d) { return (d.data.total/1e10).toLocaleString('en', {useGrouping:true})+" Billion" })
                      
   });
 
